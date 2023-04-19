@@ -1,0 +1,38 @@
+body {
+	background-color: rgb(38, 24, 24);
+	background-blend-mode: difference;
+}
+
+/* bg of hidden card */
+.card {
+	background-color: rgb(47, 47, 47);
+	color: #a5a5a5;
+	opacity: 90%;
+}
+
+.form-control {
+	background-color: rgb(47, 47, 47);
+	color: #a5a5a5;
+}
+.form-control:focus {
+	background-color: rgb(47, 47, 47);
+	color: #a5a5a5;
+}
+ul > button {
+	background-color: #131111;
+}
+ul > button:nth-child(even) {
+	background-color: #000000;
+	opacity: 0.85;
+}
+ul > button:hover {
+	background-color: rgb(61, 95, 64);
+	color: rgb(175, 255, 182);
+}
+ul > button:focus {
+	background-color: rgb(61, 95, 64);
+	color: rgb(175, 255, 182);
+}
+span.badge {
+	color: aquamarine;
+}
