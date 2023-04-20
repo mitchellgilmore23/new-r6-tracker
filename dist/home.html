@@ -1,12 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<script async src="./index.js"></script>
+		<title>R6 Tracker</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<link rel="icon" href="https://toppng.com/uploads/preview/rainbow-six-siege-logo-by-jmk-rainbow-six-siege-ico-11562854434yvpua4yeud.png" />
 		<link rel="stylesheet" href="./style.css" />
-		<title>Document</title>
+		<script defer src="./index.js"></script>
 	</head>
-	<body style="background-color: aquamarine"></body>
+	<googleAnalytics>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-X0WEENX73X"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+
+			gtag('config', 'G-X0WEENX73X');
+		</script>
+		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9702730481068210" crossorigin="anonymous"></script>
+	</googleAnalytics>
+	<!-- Contribute Modal -->
+	<modal>
+		<div class="modal fade bg-dark" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog bg-dark">
+				<div class="modal-content bg-dark text-bg-dark">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="staticBackdropLabel">Contribute</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<p class="">If you enjoy the website, drop a shoutout!</p>
+						<p>Contact: mitchellgilmore23@gmail.com</p>
+						<p>Venmo: mitchellgilmore234</p>
+						<p>XBOX: LiSmurfsRUS</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Understood</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</modal>
+
+	<modal>
+		<div class="modal fade" id="welcomeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content bg-dark text-white">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="staticBackdropLabel">Welcome!</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<p>You're back! I have recently changed a few things around. There is a lot of data now! Feel free to shoot me an email with any suggestions!</p>
+						<p>Heres a list of stuff I've added:</p>
+						<ul>
+							<li>You can use the ~ key (one above tab) to switch consoles on the fly! this will get you tracking quicker than ever.</li>
+							<li>I've added every previous season ranking in the third accordion item.</li>
+							<li>I've added the last 20 game sessions and how they ended.</li>
+						</ul>
+						<p>I hope this helps you all! This has been a fun project and am grateful for you all.</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary" id="dontShowAgain">Don't Show Again</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</modal>
+
+	<header class="my-3 mx-2 p-2">
+		<!-- Clear/ Contribute -->
+		<div>
+			<button attr="clearForm" id="clearForm" class="btn btn-outline-warning w-25 align-self-start opacity-75" role="button" tabindex="-1">Clear All</button>
+			<button type="button" class="btn btn-outline-warning mb-3 mt-0 float-end opacity-75" data-bs-toggle="modal" data-bs-target="#staticBackdrop" tabindex="-1">Contribute</button>
+		</div>
+	</header>
+
+	<body>
+		<div class="row text-center m-0 gap-0 justify-content-center d-none d-md-flex">
+			<div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl" player="1">
+				<injectCard player="1" desktop></injectCard>
+			</div>
+			<div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl" player="2">
+				<injectCard player="2" desktop></injectCard>
+			</div>
+			<div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl" player="3">
+				<injectCard player="3" desktop></injectCard>
+			</div>
+			<div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl" player="4">
+				<injectCard player="4" desktop></injectCard>
+			</div>
+			<div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl" player="5">
+				<injectCard player="5" desktop></injectCard>
+			</div>
+		</div>
+
+		<!-- 
+			Mobile Devices 
+		-->
+
+		<div id="carousel_mobile" class="carousel slide d-block d-md-none">
+			<div class="carousel-indicators">
+				<button type="button" data-bs-target="#carousel_mobile" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+				<button type="button" data-bs-target="#carousel_mobile" data-bs-slide-to="1" aria-label="Slide 2"></button>
+				<button type="button" data-bs-target="#carousel_mobile" data-bs-slide-to="2" aria-label="Slide 3"></button>
+				<button type="button" data-bs-target="#carousel_mobile" data-bs-slide-to="3" aria-label="Slide 4"></button>
+				<button type="button" data-bs-target="#carousel_mobile" data-bs-slide-to="4" aria-label="Slide 5"></button>
+			</div>
+			<div class="carousel-inner">
+				<div class="carousel-item active" player="1">
+					<injectCard player="1" mobile></injectCard>
+				</div>
+			</div>
+			<div class="carousel-item" player="2">
+				<injectCard player="2" mobile></injectCard>
+			</div>
+			<div class="carousel-item" player="3">
+				<injectCard player="3" mobile></injectCard>
+			</div>
+			<div class="carousel-item" player="4">
+				<injectCard player="4" mobile></injectCard>
+			</div>
+			<div class="carousel-item" player="5">
+				<injectCard player="5" mobile></injectCard>
+			</div>
+			<button class="carousel-control-prev d-block d-md-none" type="button" data-bs-target="#carousel_mobile" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next d-block d-md-none" type="button" data-bs-target="#carousel_mobile" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+	</body>
 </html>

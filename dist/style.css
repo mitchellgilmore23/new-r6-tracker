@@ -1,6 +1,22 @@
+@import url('../node_modules/bootstrap/dist/css/bootstrap.css');
+.accordion {
+	--bs-accordion-bg: rgb(0, 0, 0);
+}
+.carousel-indicators,
+.carousel-control-next,
+.carousel-control-prev {
+	position: fixed;
+}
+
+@media (max-width: 768px) {
+	.btn-outline-secondary {
+		--bs-btn-hover-bg: #0000;
+	}
+}
 body {
 	background-color: rgb(38, 24, 24);
 	background-blend-mode: difference;
+	background-image: url('./media/BG.png');
 }
 
 /* bg of hidden card */
