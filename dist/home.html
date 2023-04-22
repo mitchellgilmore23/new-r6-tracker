@@ -128,14 +128,17 @@
 			<div class="carousel-item" player="5">
 				<injectCard player="5" mobile></injectCard>
 			</div>
-			<button class="carousel-control-prev d-block d-md-none" type="button" data-bs-target="#carousel_mobile" data-bs-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Previous</span>
-			</button>
-			<button class="carousel-control-next d-block d-md-none" type="button" data-bs-target="#carousel_mobile" data-bs-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Next</span>
-			</button>
 		</div>
+		<button class="d-md-none" type="button" data-bs-target="#carousel_mobile" data-bs-slide="prev" style="position: fixed; top: 50vh; z-index: 4; background-color: unset; border: none; padding: 15px">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		</button>
+		<button
+			class="d-md-none"
+			type="button"
+			data-bs-target="#carousel_mobile"
+			data-bs-slide="next"
+			style="position: fixed; top: 50vh; z-index: 4; background-color: unset; border: none; padding: 15px; right: 0">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+		</button>
 	</body>
 </html>

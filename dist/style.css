@@ -12,6 +12,15 @@
 	.btn-outline-secondary {
 		--bs-btn-hover-bg: #0000;
 	}
+	[player] ul {
+		min-width: 100%;
+		max-height: 248px;
+		overflow-y: scroll;
+		background-color: unset;
+	}
+}
+[attr='autocomplete-dropdown-items-to-delete'] {
+	background-color: #a5a5a5;
 }
 body {
 	background-color: rgb(38, 24, 24);
@@ -39,7 +48,7 @@ ul > button {
 }
 ul > button:nth-child(even) {
 	background-color: #000000;
-	opacity: 0.85;
+	color: antiquewhite;
 }
 ul > button:hover {
 	background-color: rgb(61, 95, 64);
