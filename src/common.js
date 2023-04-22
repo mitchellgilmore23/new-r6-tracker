@@ -236,20 +236,6 @@ export function platformHandler(playerCol,toggle=false){ // toggle or GET platfo
 
 
 export async function Fetch(name, platform, player) {
-  const a = { playerInfo: [], "trn-cards": [], matchHistory: [], seasons: [] };
-
-  if (typeof name !== "string") return "FORMAT_ERROR";
-  let url = `https://r6.tracker.network/profile/${platform}/${name}/`;
-  let matchHistoryUrl = `https://r6.tracker.network/profile/${platform}/${name}/mmr-history`;
-  let seasonHistoryUrl = `https://r6.tracker.network/profile/${platform}/${name}/seasons`;
-  const data = await exec(url);
-  if (!data) return "TIMEOUT";
-
- 
-  // push all recent matches into array a subarray matchHistory
-  const matchHistory = await exec(matchHistoryUrl);
-  const matches = cheerio.load(matchHistory);
-
   
   // function for converting time into human readable time
   function humanTime(binding) {
