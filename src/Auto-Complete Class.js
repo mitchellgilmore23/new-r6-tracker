@@ -4,7 +4,17 @@ const $ = require('jquery');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const proxy = 'https://tracker-proxy.herokuapp.com'
+const moment = require('moment');
+const MatchHistoryRankImgUrl = (cheerioData,arr) => cheerioData(arr).children().eq(3).children().attr('src') || "undefined"
+const mainFetchRecordMMrAttr = (cheerioData) => cheerioData("#profile > div.trn-scont.trn-scont--swap > div.trn-scont__aside > div:nth-child(3) > div > div:nth-child(1) > div.r6-quickseason__image > img").attr()
+const mainFetchRecordPointAttr = (cheerioData) => cheerioData("#profile > div.trn-scont.trn-scont--swap > div.trn-scont__aside > div:nth-child(2) > div > div:nth-child(1) > div.r6-quickseason__image > img").attr()
 
+
+function MatchHistoryUTCTime(cheerioData,arr) {if (cheerioData(arr).children().children().eq(0).attr('v-human-time')) {
+	return cheerioData(arr).children().children().eq(0).attr('v-human-time').replaceAll("'",'')
+	} 
+	else return "undefined"
+}
 export class autoComplete {
 	constructor(lookupName, currentPlayerCol, lookupPlatform) {
     this.lookupName = lookupName;
@@ -48,7 +58,7 @@ export class getRankedData {
 	axiosCallMain = () => axios.get(`${proxy}/https://r6.tracker.network/profile/${this.lookupPlatform}/${this.lookupName}`)
 	axiosCallMatchHistory = () => axios.get(`${proxy}/https://r6.tracker.network/profile/${this.lookupPlatform}/${this.lookupName}/mmr-history`)
 	axiosCallSeasonHistory = () => axios.get(`${proxy}/https://r6.tracker.network/profile/${this.lookupPlatform}/${this.lookupName}/seasons`)
-
+	
   async fetchMain(lookupName,lookupPlatform) {
 		
 		var completeArray = {'axiosData': [],'cheerioData': {main:[],matchHistory:[],seasons:[]}}
@@ -57,63 +67,49 @@ export class getRankedData {
 		
 		Promise.all([this.axiosCallMain(),this.axiosCallMatchHistory(),this.axiosCallSeasonHistory()]).then(response => {
 			response.forEach(val => completeArray.axiosData.push(val.data)) //push axios into first array item 
-		
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			// Main Webpage
-			var axiosData = cheerio.load(completeArray.axiosData[0])
-			axiosData('#profile .trn-card').each((_,arr) => { //initial push
-				completeArray.cheerioData.main.push($(arr).text()
-				.replace(/(\n){1,}/gm,'\n')
-				.trim()
-				.split('\n'))
-			})
-			completeArray.cheerioData.main.forEach((arr,arrI) => arr.forEach((val,valI) =>  { //sorting and filtering
-				completeArray.cheerioData.main[arrI][valI] = val.replace(/^ | $/g,'')
-				if (val.length < 1 || val == ' ' || val == '') completeArray.cheerioData.main[arrI].splice(valI,1)
+			var cheerio$ = cheerio.load(completeArray.axiosData[0])
+			sortingHelper(completeArray.cheerioData.main,'#profile .trn-card',cheerio$)
+			completeArray.cheerioData.main.forEach((arr,arrI) => arr.forEach((val,valI) =>  { //sorting and filtering	
+					completeArray.cheerioData.main[arrI][valI] = val.replace(/^ | $/g,'')
+					if (val.length < 1 || val == ' ' || val == '') completeArray.cheerioData.main[arrI].splice(valI,1)
 			}))
-
-
+			completeArray.cheerioData.main[7].unshift(mainFetchRecordMMrAttr(cheerio$))
+			completeArray.cheerioData.main[6].unshift(mainFetchRecordPointAttr(cheerio$))
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//Match History
-			var axiosData = cheerio.load(completeArray.axiosData[1])
-
-			axiosData('.trn-table__row').each((_,arr) => { //main content 
-				completeArray.cheerioData.matchHistory.push($(arr).text()
-				.replace(/(\n){1,}/gm,'\n')
-				.trim()
-				.split('\n')		
-				)
+			var cheerio$ = cheerio.load(completeArray.axiosData[1])
+			sortingHelper(completeArray.cheerioData.matchHistory,'.trn-table__row',cheerio$)
+			cheerio$('.trn-table__row').each((i,arr) => { // push match history
+				completeArray.cheerioData.matchHistory[i] = ($(arr).text().replace(/(\n){1,}/gm,'\n').trim().split('\n'))
+				completeArray.cheerioData.matchHistory[i].push(MatchHistoryRankImgUrl(cheerio$,arr)) //push match history rank img url
+				completeArray.cheerioData.matchHistory[i].push(MatchHistoryUTCTime(cheerio$,arr))// push match history utc time
+				completeArray.cheerioData.matchHistory[i].push(moment.utc(MatchHistoryUTCTime(cheerio$,arr)).fromNow()) //push match history readable time
 			})
 			completeArray.cheerioData.matchHistory.shift()
-			axiosData('table > tbody > tr > td:nth-child(4) > img').each((i,arr) => {/// rank-img url
-				completeArray.cheerioData.matchHistory[i].unshift(arr.attribs.src)
-				// console.log(arr.attribs.src)
-			})
 			completeArray.cheerioData.matchHistory.forEach((arr,arrI) => arr.forEach((val,valI) =>  { //sorting and filtering
 				completeArray.cheerioData.matchHistory[arrI][valI] = val.replace(/^ | $/g,'')
         if (val.length < 1 || val == ' ' || val == '') completeArray.cheerioData.matchHistory[arrI].splice(valI,1)
       }))
-
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//Season History
-			var axiosData = cheerio.load(completeArray.axiosData[2])
-			axiosData('.trn-card').each((_,arr) => {
-				completeArray.cheerioData.seasons.push($(arr).text()
-				.replace(/(\n){1,}/gm,'\n')
-				.trim()
-				.split('\n'))
-			})
+			var cheerio$ = cheerio.load(completeArray.axiosData[2])
+			sortingHelper(completeArray.cheerioData.seasons,'.trn-card',cheerio$)
 			completeArray.cheerioData.seasons.forEach((arr,arrI) => arr.forEach((val,valI) =>  { // sorting and filtering
 				completeArray.cheerioData.seasons[arrI][valI] = val.replace(/^ | $/g,'')
 				if (val.length < 1 || val == ' ' || val == '') completeArray.cheerioData.seasons[arrI].splice(valI,1)
 			}))
+			completeArray.cheerioData.seasons.shift()
 			console.log(completeArray)
 		})	
-	}
-				// if (i < 21) {
-				// 	if (i > 0 && $(this)[0].children[7].children[1] !== undefined) {
-				// 		a["matchHistory"][i].push($(this)[0].children[7].children[1].attribs["src"]);
-				// 		a["matchHistory"][i].push($(this)[0].children[1].children[1].attribs["v-human-time"]);
-				// 		a["matchHistory"][i][7] = a["matchHistory"][i][7].replaceAll(`'`, ``);
-				// 		a["matchHistory"][i].push(humanTime(a["matchHistory"][i][7]));
-				// 	}
-				// }
 
+	}
+}
+
+function sortingHelper(arrToInsertData,lookupVal,cheerioDefinition){
+	cheerioDefinition(`${lookupVal}`).each((_,arr) => {
+		arrToInsertData.push($(arr).text().replace(/(\n){1,}/gm,'\n')
+		.trim().split('\n'))
+	})
 }

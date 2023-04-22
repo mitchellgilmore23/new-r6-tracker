@@ -26,7 +26,7 @@ $("[attr*='input-group-button']").on("click",v=>{ //platform button click
 	Common.platformHandler(currentPlayerCol,true)
 	AutoComplete = new Class.autoComplete(lookupName,currentPlayerCol,Common.platformHandler(currentPlayerCol))
 })
-
+// console.log($('button'))
 window.dropdownClicked = async function (v,currentPlayerCol) { //dropdown clicked
   var lookupName = v[0].childNodes[0].data;
   var currentPlayerCol;
