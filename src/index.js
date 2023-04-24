@@ -1,12 +1,18 @@
-const $ = Common.$; import * as Common from './common.js'; 
-import rankImg from './rank-img-fetch.js';
-import  * as Class  from "./Auto-Complete Class.js"; 
+const $ = Common.$; import * as Common from './common'; 
+import rankImg from './rank-img-fetch';
+import  * as Class  from "./Auto-Complete Class";
+import * as Fetch from "./Fetch";
+import * as Parser from "./Parser";
+import * as Dom_Handler from "./DOM Handler";
+const axios = require('axios');
 var AutoComplete = new Class.autoComplete()
-
-$(`injectcard`).each((_,v) => {$(v).replaceWith(Common.loadPlayerCards($(v).attr('player')))}); // loads cards for the players
+$('inject[attr=buttonGroup]').each((_,v) => $(v).replaceWith(Common.domElements.buttonGroup()))
+$(`inject[attr=accordionCard1]`).each((i,v) => $(v).replaceWith(Common.domElements.accordionCard1(i)))
+$(`inject[attr=accordionCard2]`).each((i,v) => $(v).replaceWith(Common.domElements.accordionCard2(i))) 
+$(`inject[attr=accordionCard3]`).each((i,v) => $(v).replaceWith(Common.domElements.accordionCard3(i))) 
+$(`inject[attr=accordionCard4]`).each((i,v) => $(v).replaceWith(Common.domElements.accordionCard4(i))) 
 
 var oldTextForInputChange;
-
 $('[attr=input-group-text]').on('keyup', async v => { // text input change
 	const newText = String(v.currentTarget.value).toLowerCase()
   if (oldTextForInputChange === newText || newText.length < 1 ) {
@@ -17,7 +23,6 @@ $('[attr=input-group-text]').on('keyup', async v => { // text input change
 	var currentPlayerCol= v.currentTarget.parentElement.parentElement.attributes[1].value
   var lookupPlatform = Common.platformHandler(currentPlayerCol)
 	AutoComplete = new Class.autoComplete(lookupName,currentPlayerCol,lookupPlatform)
-  const a = await AutoComplete.axiosCall().then(response => response.data)
 })
 
 $("[attr*='input-group-button']").on("click",v=>{ //platform button click
@@ -26,51 +31,44 @@ $("[attr*='input-group-button']").on("click",v=>{ //platform button click
 	Common.platformHandler(currentPlayerCol,true)
 	AutoComplete = new Class.autoComplete(lookupName,currentPlayerCol,Common.platformHandler(currentPlayerCol))
 })
-// console.log($('button'))
+
 window.dropdownClicked = async function (v,currentPlayerCol) { //dropdown clicked
   var lookupName = v[0].childNodes[0].data;
   var currentPlayerCol;
   var lookupPlatform = Common.platformHandler(currentPlayerCol)
   AutoComplete.clearResults()
-  const a = new Class.getRankedData(lookupName,currentPlayerCol,lookupPlatform)
+  fetchRankedData(lookupName,currentPlayerCol,lookupPlatform)
+}
+
+const completeArray = {'axiosData': {},'cheerioData': {}}
+function fetchRankedData (lookupName,currentPlayerCol,lookupPlatform) {
+  Fetch.main(lookupName,lookupPlatform)
+    .then(response => {
+      completeArray.axiosData.main =  response.data
+      Parser.main(completeArray)
+    })
+    .then(() => {
+    Dom_Handler.main(lookupName,currentPlayerCol,lookupPlatform,completeArray)
+  })
+  Fetch.matches(lookupName,lookupPlatform)
+    .then(response => {
+      completeArray.axiosData.matchHistory= response.data
+      Parser.matches(completeArray)
+    })
+    .then(() => {
+      Dom_Handler.matches(lookupName,currentPlayerCol,lookupPlatform,completeArray)
+  })
+  Fetch.seasons(lookupName,lookupPlatform)
+    .then(response => {
+      completeArray.axiosData.seasonsHistory = response.data
+      Parser.seasons(completeArray)  
+    }).then(()=>{
+      Dom_Handler.seasons(lookupName,currentPlayerCol,lookupPlatform,completeArray)
+  })
 }
 
 
 
-// async function request(lookupName, currentPlayerCol,lookupPlatform) {
-
-//   const completeData = await Common.Fetch(lookupName, currentPlayerCol, lookupPlatform).then((response) => response);
-
-//   if (completeData === "TIMEOUT") {
-//     $(`#p${player}Spinner`).attr("hidden", "");
-//     $(`#p${player}NotFound`).removeAttr("hidden");
-//     console.error("TIMED OUT");
-//     return;
-//   }
-//   if (completeData === "FORMAT_ERROR") {
-//     $(`#p${player}Spinner`).attr("hidden");
-//     console.error("FORMAT ERROR");
-//     return;
-//   }
-//   console.log("completeData: ", completeData); //
-//   // data sorting
-//   const a = completeData["trn-cards"];
-//   function addOffset(array, value, offset = 1) {
-//     if (a[array].find((element) => element === value) == "undefined") {
-//       return "N/A";
-//     }
-//     return a[array][a[array].indexOf(`${value}`) + offset];
-//   }
-//   // check if MMR is highest or if Rank Points is highest
-//   const maxRankIsMmr = () => {
-//     var maxMMR = Common.StripLetters(a[7][3]) * 1;
-//     var maxRankPoints = Common.StripLetters(a[6][3]) * 1;
-//     if (maxMMR > maxRankPoints) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   };
 
 //   const data = {
 //     header: {
