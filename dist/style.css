@@ -1,17 +1,71 @@
 @import url('../node_modules/bootstrap/dist/css/bootstrap.css');
 .accordion {
 	--bs-accordion-bg: rgb(0, 0, 0);
+	--bs-accordion-btn-focus-border-color: unset;
+	--bs-accordion-active-bg: #ad9c27;
 }
-.skeleton {
-	animation: skeleton-loading 1s linear infinite alternate;
+.accordion-button {
+	background-color: rgb(111 117 124);
+	color: #fff;
+}
+
+.accordion-body {
+	padding: 0;
+}
+.skeleton-img {
+	animation: skeleton-loading 2s linear infinite alternate;
+	border-radius: 0.125em;
+	opacity: 0.3;
+	border-radius: 12px;
+}
+.vstack {
+	align-items: center;
+}
+
+.skeleton-text {
+	width: inherit;
+	height: inherit;
+}
+.placeholder {
+	color: brown;
+	min-height: 25px;
+	border-radius: 7px;
+}
+.placeholder-glow .placeholder {
+	animation: skeleton-loading 7s linear infinite alternate;
+}
+[attr='accordion-title-url'] {
+	min-width: calc(inherit);
 }
 @keyframes skeleton-loading {
 	0% {
-		background-color: hsl(200, 20%, 70%);
+		background-color: hsla(16, 100%, 43%, 0.979);
+	}
+	15% {
+		background-color: hsl(36, 100%, 45%);
+	}
+	30% {
+		background-color: hsl(0, 0%, 87%);
+	}
+	45% {
+		background-color: hsl(53, 100%, 50%);
+	}
+	60% {
+		background-color: hsl(154, 100%, 44%);
+	}
+	75% {
+		background-color: hsl(304, 100%, 50%);
 	}
 	100% {
-		background-color: hsl(200, 20%, 95%);
+		background-color: hsl(319, 100%, 40%);
 	}
+}
+.carousel-item {
+	transition: transform 0.3s ease-in-out;
+}
+
+.accordion-button:not(.collapsed) {
+	color: #fff;
 }
 
 .carousel-indicators,
@@ -20,8 +74,8 @@
 	position: fixed;
 }
 ::-webkit-scrollbar {
-	background-color: rgb(153, 153, 153);
-	width: 15px;
+	/* background-color: rgb(153, 153, 153);
+	width: 15px; */
 }
 
 @media (max-width: 768px) {
@@ -33,6 +87,10 @@
 		max-height: 248px;
 		overflow-y: scroll;
 		background-color: unset;
+	}
+	--webkit-scrollbar {
+		width: 0px !important;
+		visibility: hidden;
 	}
 }
 [attr='autocomplete-dropdown-items-to-delete'] {
