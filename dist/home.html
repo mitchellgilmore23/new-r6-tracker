@@ -17,11 +17,11 @@
 		</div>
 	</header>
 	<body>
-		<div class="container-fluid" style="display: flex; flex-direction: column">
-			<div class="row d-none d-md-flex">
+		<div class="container-fluid d-none d-md-flex" style="display: flex; flex-direction: column">
+			<div class="row">
 				<div class="col-md-6 col-lg-4 col-xxl" player="1">
 					<inject attr="buttonGroup"></inject>
-					<div class="card border-light text-center mt-3 z-1 placeholder-glow">
+					<div class="card border-light text-center mt-3 z-1 placeholder-glow" hidden>
 						<a class="card-body link-info fs-5 my-2 placeholder col-8 align-self-center" attr="card-header" target="_blank" tabindex="-1"></a>
 						<div class="accordion">
 							<inject attr="accordionCard1"></inject>
@@ -33,7 +33,7 @@
 				</div>
 				<div class="col-md-6 col-lg-4 col-xxl" player="2">
 					<inject attr="buttonGroup"></inject>
-					<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow">
+					<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 						<a class="card-body link-info fs-5 my-2 placeholder col-8 align-self-center" attr="card-header" target="_blank" tabindex="-1"></a>
 						<div class="accordion">
 							<inject attr="accordionCard1"></inject>
@@ -45,7 +45,7 @@
 				</div>
 				<div class="col-md-6 col-lg-4 col-xxl" player="3">
 					<inject attr="buttonGroup"></inject>
-					<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow">
+					<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 						<a class="card-body link-info fs-5 my-2 placeholder col-8 align-self-center" attr="card-header" target="_blank" tabindex="-1"></a>
 						<div class="accordion">
 							<inject attr="accordionCard1"></inject>
@@ -57,7 +57,7 @@
 				</div>
 				<div class="col-md-6 col-lg-4 col-xxl" player="4">
 					<inject attr="buttonGroup"></inject>
-					<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow">
+					<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 						<a class="card-body link-info fs-5 my-2 placeholder col-8 align-self-center" attr="card-header" target="_blank" tabindex="-1"></a>
 						<div class="accordion">
 							<inject attr="accordionCard1"></inject>
@@ -69,7 +69,7 @@
 				</div>
 				<div class="col-md-6 col-lg-4 col-xxl" player="5">
 					<inject attr="buttonGroup"></inject>
-					<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow">
+					<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 						<a class="card-body link-info fs-5 my-2 placeholder col-8 align-self-center" attr="card-header" target="_blank" tabindex="-1"></a>
 						<div class="accordion">
 							<inject attr="accordionCard1"></inject>
@@ -83,23 +83,21 @@
 		</div>
 		<!--Mobile Devices -->
 		<div id="carousel_mobile" class="carousel slide d-block d-md-none">
-			<div class="carousel-inner">
-				<div class="carousel-item active" player="1">
-					<inject attr="buttonGroup"></inject>
-					<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow">
-						<a class="card-body link-info fs-5 my-2 placeholder col-8 align-self-center" attr="card-header" target="_blank" tabindex="-1"></a>
-						<div class="accordion">
-							<inject attr="accordionCard1"></inject>
-							<inject attr="accordionCard2"></inject>
-							<inject attr="accordionCard3"></inject>
-							<inject attr="accordionCard4"></inject>
-						</div>
+			<div class="carousel-item active" player="1">
+				<inject attr="buttonGroup"></inject>
+				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
+					<a class="card-body link-info fs-5 my-2 placeholder col-8 align-self-center" attr="card-header" target="_blank" tabindex="-1"></a>
+					<div class="accordion">
+						<inject attr="accordionCard1"></inject>
+						<inject attr="accordionCard2"></inject>
+						<inject attr="accordionCard3"></inject>
+						<inject attr="accordionCard4"></inject>
 					</div>
 				</div>
 			</div>
 			<div class="carousel-item" player="2">
 				<inject attr="buttonGroup"></inject>
-				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow">
+				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 					<a class="card-body link-info fs-5 my-2 placeholder col-4 align-self-center" attr="card-header" target="_blank" tabindex="-1"></a>
 					<div class="accordion">
 						<inject attr="accordionCard1"></inject>
@@ -111,7 +109,7 @@
 			</div>
 			<div class="carousel-item" player="3">
 				<inject attr="buttonGroup"></inject>
-				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow">
+				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 					<a class="card-body link-info fs-5 my-2 placeholder col-4 align-self-center" attr="card-header" target="_blank" tabindex="-1"></a>
 					<div class="accordion">
 						<inject attr="accordionCard1"></inject>
@@ -123,7 +121,7 @@
 			</div>
 			<div class="carousel-item" player="4">
 				<inject attr="buttonGroup"></inject>
-				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow">
+				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 					<a class="card-body link-info fs-5 my-2 placeholder col-4 align-self-center" attr="card-header" target="_blank" tabindex="-1"></a>
 					<div class="accordion">
 						<inject attr="accordionCard1"></inject>
@@ -135,7 +133,7 @@
 			</div>
 			<div class="carousel-item" player="5">
 				<inject attr="buttonGroup"></inject>
-				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow">
+				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 					<a class="card-body link-info fs-5 my-2 placeholder col-4 align-self-center" attr="card-header" target="_blank" tabindex="-1"></a>
 					<div class="accordion">
 						<inject attr="accordionCard1"></inject>
@@ -226,4 +224,20 @@
 			</div>
 		</div>
 	</modal>
+	<errortoast>
+		<div class="toast-container position-fixed bottom-0 end-0 p-3">
+			<div id="error-toast" class="toast opacity-75" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true">
+				<div class="toast-header bg-danger text-white">
+					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" class="bi bi-bug" viewBox="0 0 16 16">
+						<path
+							d="M4.355.522a.5.5 0 0 1 .623.333l.291.956A4.979 4.979 0 0 1 8 1c1.007 0 1.946.298 2.731.811l.29-.956a.5.5 0 1 1 .957.29l-.41 1.352A4.985 4.985 0 0 1 13 6h.5a.5.5 0 0 0 .5-.5V5a.5.5 0 0 1 1 0v.5A1.5 1.5 0 0 1 13.5 7H13v1h1.5a.5.5 0 0 1 0 1H13v1h.5a1.5 1.5 0 0 1 1.5 1.5v.5a.5.5 0 1 1-1 0v-.5a.5.5 0 0 0-.5-.5H13a5 5 0 0 1-10 0h-.5a.5.5 0 0 0-.5.5v.5a.5.5 0 1 1-1 0v-.5A1.5 1.5 0 0 1 2.5 10H3V9H1.5a.5.5 0 0 1 0-1H3V7h-.5A1.5 1.5 0 0 1 1 5.5V5a.5.5 0 0 1 1 0v.5a.5.5 0 0 0 .5.5H3c0-1.364.547-2.601 1.432-3.503l-.41-1.352a.5.5 0 0 1 .333-.623zM4 7v4a4 4 0 0 0 3.5 3.97V7H4zm4.5 0v7.97A4 4 0 0 0 12 11V7H8.5zM12 6a3.989 3.989 0 0 0-1.334-2.982A3.983 3.983 0 0 0 8 2a3.983 3.983 0 0 0-2.667 1.018A3.989 3.989 0 0 0 4 6h8z" />
+					</svg>
+					<strong class="me-auto ps-3">Error!</strong>
+					<small>0 Min Ago</small>
+					<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+				<div class="toast-body bg-danger-subtle text-danger" id="error-toast-body"></div>
+			</div>
+		</div>
+	</errortoast>
 </html>

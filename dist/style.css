@@ -21,6 +21,11 @@
 .vstack {
 	align-items: center;
 }
+[attr='accordion-card-3'],
+[attr='accordion-card-4'] {
+	max-height: 300px;
+	overflow-y: scroll;
+}
 
 .skeleton-text {
 	width: inherit;
@@ -73,14 +78,13 @@
 .carousel-control-prev {
 	position: fixed;
 }
-::-webkit-scrollbar {
-	/* background-color: rgb(153, 153, 153);
-	width: 15px; */
-}
 
 @media (max-width: 768px) {
-	.btn-outline-secondary {
-		--bs-btn-hover-bg: #0000;
+	.btn-outline-secondary,
+	.btn-outline-warning,
+	.btn-outline-success {
+		--bs-btn-hover-bg: unset;
+		--bs-btn-hover-color: unset;
 	}
 	[player] ul {
 		min-width: 100%;
@@ -93,6 +97,7 @@
 		visibility: hidden;
 	}
 }
+
 [attr='autocomplete-dropdown-items-to-delete'] {
 	background-color: #a5a5a5;
 }

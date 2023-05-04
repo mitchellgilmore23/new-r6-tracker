@@ -10,16 +10,16 @@ export function main(array){
 	cheerioLoad('#profile .trn-card').each((i,arr) => {
 		array.cheerioData.main[i] = cheerioLoad(arr).text().replace(/(\n){1,}/gm,'\n').trim().split('\n')
 		array.cheerioData.main.forEach((arr,arrI) => arr.forEach((val,valI) =>  {
-		array.cheerioData.main[arrI][valI] = val.replace(/^ | $/g,'')
-		if (val.length < 1 || val == ' ' || val == '') array.cheerioData.main[arrI].splice(valI,1)
+			array.cheerioData.main[arrI][valI] = val.replace(/^ | $/g,'');
+			if (val.length < 1 || val == ' ' || val == '') array.cheerioData.main[arrI].splice(valI,1);
 		}))
 	})
 	array.cheerioData.main[7].unshift(mainFetchRecordMMrAttr(cheerioLoad))
 	array.cheerioData.main[6].unshift(mainFetchRecordPointAttr(cheerioLoad))
 	array.cheerioData.main.shift()
+	array.cheerioData.main[0].unshift(cheerioLoad('.trn-profile-header__name').text().replace(/\n/g,''))
 	return array;
 }
-
 export function matches(array) {
 	var cheerioLoad = cheerio.load(array.axiosData.matchHistory)
 	array.cheerioData.matchHistory = []

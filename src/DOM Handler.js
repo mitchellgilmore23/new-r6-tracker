@@ -1,33 +1,47 @@
 const $ = require("jquery")
 import {default as rankImg } from "./Rank-Img"
-export function initializeDOM(){
-  $('inject[attr=buttonGroup]').each((_,v) => $(v).replaceWith(defaultElements.buttonGroup))
-  $(`inject[attr=accordionCard1]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard1(i)))
-  $(`inject[attr=accordionCard2]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard2(i))) 
-  $(`inject[attr=accordionCard3]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard3(i))) 
-  $(`inject[attr=accordionCard4]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard4(i))) 
-  $(`.placeholder`).attr('placeholder','placeholder')
+export function togglePlaceholder(currentPlayerCol,show){
+  var colFilter = `div[player=${currentPlayerCol || 1}]`
+  show ? $(`${colFilter} [placeholder=placeholder]`).addClass('placeholder') : $(`${colFilter} [placeholder=placeholder]`).removeClass('placeholder')
+}
+window.initializeDOM = initializeDOM;
+export function initializeDOM(player){
+  if (!player){
+    $(`inject[attr=buttonGroup]`).each((i,v) => $(v).replaceWith(defaultElements.buttonGroup(i)))
+    $(`inject[attr=accordionCard1]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard1(i)))
+    $(`inject[attr=accordionCard2]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard2(i))) 
+    $(`inject[attr=accordionCard3]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard3(i))) 
+    $(`inject[attr=accordionCard4]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard4(i))) 
+    $(`.placeholder`).attr('placeholder','placeholder')
+  }
+  else {
+    $(`div[player=${player}] inject[attr=buttonGroup]`).each((i,v) => $(v).replaceWith(defaultElements.buttonGroup(i)))
+    $(`div[player=${player}] inject[attr=accordionCard1]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard1(i)))
+    $(`div[player=${player}] inject[attr=accordionCard2]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard2(i))) 
+    $(`div[player=${player}] inject[attr=accordionCard3]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard3(i))) 
+    $(`div[player=${player}] inject[attr=accordionCard4]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard4(i))) 
+    $(`div[player=${player}] .placeholder`).attr('placeholder','placeholder')
+    console.log(player)
+  }
 };
-export function clearPlayer(lookupColumn) {
-$(`div[player=${lookupColumn}] [attr=card-header]`).text('')
-};
+export function hideCard(lookupColumn) {$(`div[player=${lookupColumn}] .card`).attr('hidden',true)};
+export function showCard(lookupColumn) {$(`div[player=${lookupColumn}] .card`).removeAttr('hidden')};
+
 export const defaultElements = {
-  buttonGroup:
+  buttonGroup: (i) => 
   `<div class="btn-group w-100">
     <button class="btn rounded-2 btn-outline-success my-2 w-50" type="button" attr="input-group-button-submit" tabindex="-1">Submit</button>
     <button class="btn w-50 rounded-2 btn-outline-info my-2 w-50" type="button" attr="input-group-button-refresh" tabindex="-1" hidden>Refresh</button>
   </div>
   <div class="input-group mb-1 mt-1">
-    <input type="text" class="form-control" placeholder="Enter name.." attr="input-group-text" tabindex="-1" />
+    <input type="text" class="form-control" placeholder="Enter name.." attr="input-group-text" tabindex='-1' />
     <button class="btn btn-outline-secondary active" type="button" attr="input-group-button-xbox" tabindex="-1" data-bs-title="Use the backquote key (~) to change platforms on the fly!">
       XBOX
     </button>
     <button class="btn btn-outline-secondary" type="button" tabindex="-1" attr="input-group-button-ps">PS</button>
   </div>
 	<ul class="list-group dropdown-menu p-0"></ul>`,
-  playerNotFound:`<div attr="notFound" class="container w-100 bg-warning p-2 my-3 rounded-3 opacity-50" hidden><p>Player Not Found..</p></div>`,
-  playerNotRanked: `<div attr="notRanked" class="container w-100 bg-warning p-2 my-3 rounded-3 opacity-50" hidden><p>Player Not Ranked..</p></div>`,
-  accordionCard1: (i) => {return `
+  accordionCard1: (i) => `
 	<inject attr='accordionCard1'>
     <div class="accordion-item">
       <div class="accordion-header">
@@ -90,7 +104,7 @@ export const defaultElements = {
       </div>
     </div> 
 	<inject>`
-  }, 
+  , 
   accordionCard2: (i) => {return `
   <inject attr='accordionCard2'>
     <div class="accordion-item">
@@ -113,8 +127,8 @@ export const defaultElements = {
                 <p card2="body_kills_per_match" class="mt-2 mb-3 fs-5 placeholder col-4"></p>
                 <p class="mb-0 text-decoration-underline">Kills/Min:</p>
                 <p card2="body_kills_per_min" class="mt-2 mb-3 fs-5 placeholder col-4"></p>
-                <p class="mb-0 text-decoration-underline">Time Played:</p>
-                <p card2="body_time_played" class="mt-2 mb-3 fs-5 placeholder col-6"></p>
+                <p class="mb-0 text-decoration-underline" >Time Played:</p>
+                <p card2="body_time_played" class="mt-2 mb-3 fs-5 placeholder col-6" style='inline-size: fit-content;'></p>
               </div>
               <div class="col-6 vstack">
                 <p class="mb-0 text-decoration-underline">Average K/D:</p>
@@ -183,6 +197,7 @@ export const defaultElements = {
   </inject>`
   }, 
   accordionCard4: (i) => {return `
+  <inject attr='accordionCard4'>
     <div class="accordion-item">
       <h2 class="accordion-header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}4" aria-expanded="false" aria-controls="collapse${i}4" tabindex="-1">
@@ -213,14 +228,15 @@ export const defaultElements = {
           </div>
         </div>
       </div>
-    </div>`
+    </div>
+  </inject>`
   }
 };
 
 export function main (currentPlayerCol,array,lookupName) {
 	let colFilter = `div[player=${currentPlayerCol}]`;
   let arr = array.main;
-  $(`${colFilter} [attr=card-header]`).attr('href', array.main[0][1].replace('https://tracker-proxy.herokuapp.com/','')).text(lookupName) ||'http://www.google.com';
+  $(`${colFilter} [attr=card-header]`).attr('href', array.main[0][0] ||'http://www.google.com').text(array.main[0][1]);
   /////////////card 1
   $(`${colFilter} [card1=current_season]`).text(array.main[3][0])
   $(`${colFilter} [card1=current_rank_img]`).attr('src', rankImg(addOffset(arr[3],'Rank',1)))
@@ -238,17 +254,26 @@ export function main (currentPlayerCol,array,lookupName) {
   $(`${colFilter} [card1=footer_losses]`).text(addOffset(arr[3],'Losses',1))
   $(`${colFilter} [card1=footer_win_]`).text(addOffset(arr[3],'Win %',1)+' %')
   ///////////////card 2
-  $(`${colFilter} [card2=max_rank_img]`).attr('src', rankImg(arr[5][0].title))
+  let mmrVsRp = mmrOrRp(arr)
+  if (mmrVsRp == 'rp') $(`${colFilter} [card2=max_rank_img]`).attr('src', arr[5][0].src)
+  else if (mmrVsRp =='mmr') $(`${colFilter} [card2=max_rank_img]`).attr('src', arr[6][0].src)
   //body
+
   $(`${colFilter} [card2=body_kills_per_match]`).text(addOffset(arr[1],'Kills/match',1))
   $(`${colFilter} [card2=body_kills_per_min]`).text(addOffset(arr[1],'Kills/min',1))
-  $(`${colFilter} [card2=body_time_played]`).text(addOffset(arr[1],'Time Played',1))
+  $(`${colFilter} [card2=body_time_played]`).text(String(addOffset(arr[1],'Time Played',1)).indexOf('#') >= 0 ? "--" : addOffset(arr[1],'Time Played',1))
   $(`${colFilter} [card2=body_avg_kd]`).text(addOffset(arr[1],'KD',1))
   $(`${colFilter} [card2=body_total_kills]`).text(addOffset(arr[1],'Kills',1))
   $(`${colFilter} [card2=body_total_deaths]`).text(addOffset(arr[1],'Deaths',1))
   //
-  $(`${colFilter} [card2=body_max_mmr_season]`).text(addOffset(arr[5],'Personal Record',2))
-  $(`${colFilter} [card2=body_max_mmr]`).text(addOffset(arr[5],'Personal Record',1))
+  if (mmrVsRp == 'rp') { 
+    $(`${colFilter} [card2=body_max_mmr_season]`).text(addOffset(arr[5],'Personal Record',2))
+    $(`${colFilter} [card2=body_max_mmr]`).text(addOffset(arr[5],'Personal Record',1))
+  }
+  else if (mmrVsRp =='mmr'){
+    $(`${colFilter} [card2=body_max_mmr_season]`).text(addOffset(arr[6],'Personal Record',2))
+    $(`${colFilter} [card2=body_max_mmr]`).text(addOffset(arr[6],'Personal Record',1))
+  }
   //footer
   $(`${colFilter} [card2=footer_matches]`).text(addOffset(arr[1],'Matches',1).replace(/[A-Za-z ]/g, ''))
   $(`${colFilter} [card2=footer_wins]`).text(addOffset(arr[1],'Wins',1))
@@ -257,6 +282,7 @@ export function main (currentPlayerCol,array,lookupName) {
   ////////////////////////////////
   console.log(lookupName,currentPlayerCol,array)
   togglePlaceholder(currentPlayerCol,false)
+  mmrOrRp(arr)
 };
 
 export function seasons(currentPlayerCol,completeArray) {
@@ -315,11 +341,26 @@ export function matches(currentPlayerCol,completeArray) {
     $(`div[player=${currentPlayerCol}] [attr=accordion-card-4]`).append(matchesTemplate(date, mmr, mmrChange, result(), imgSource, KD, humanTime));
   });
 };
-
-
-const addOffset = (array, value, offset = 1) => array.find((element) => element === value) == "undefined" ? "N/A" : array[array.indexOf(`${value}`) + offset]
-export function togglePlaceholder(currentPlayerCol,show){
-  console.log('placeholder toggled')
-  var colFilter = `div[player=${currentPlayerCol || 1}]`
-  show ? $(`${colFilter} [placeholder=placeholder]`).addClass('placeholder') : $(`${colFilter} [placeholder=placeholder]`).removeClass('placeholder')
+export function initializeDOMForNewPlayer(currentPlayerCol,inMobileView) {
+  inMobileView ? $(`[player=${currentPlayerCol}] [attr=input-group-text]`).eq(1).val('') : $(`[player=${currentPlayerCol}] [attr=input-group-text]`).eq(0).val(''); //clear input
+  $(`[attr='autocomplete-dropdown-items-to-delete']`).remove(); //clear autocomplete
+  $(`div[player=${currentPlayerCol}] [attr=card-header]`).text('') //clear header
+  showCard(currentPlayerCol); //show card
+  $(`div[player=${currentPlayerCol}] [attr='input-group-button-refresh']`).removeAttr('hidden') // show refresh button
+}
+function addOffset(array, value, offset = 1) {
+  if (!array.find((element) => element === value)) return 'N/A' 
+  else return array[array.indexOf(`${value}`) + offset]
+}
+function mmrOrRp(arr){ 
+  let result;
+  if (arr[5].find((element) => element === 'Personal Record') && arr[6].find((element) => element === 'Personal Record')){ //Personal Record on BOTH rp and mmr
+    let bestRP = arr[5][arr[5].indexOf('Personal Record') +1].replace(/[A-Za-z ,]/g, '') *1
+    let bestMMR = arr[6][arr[6].indexOf('Personal Record') +1].replace(/[A-Za-z ,]/g, '') *1
+    bestRP <= bestMMR ? result = 'mmr' : result = 'rp';
+    return result;
+  }
+  else if(arr[5].find((element) => element === 'Personal Record')) return 'rp'
+  else if (arr[6].find((element) => element === 'Personal Record')) return 'mmr'
+  else return false;
 }
