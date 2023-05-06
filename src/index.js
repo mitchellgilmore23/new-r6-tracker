@@ -5,7 +5,7 @@ import * as Off_Canvas from './Off Canvas'; require('./Local Storage');
 Off_Canvas.refresh();
 Dom_Handler.initializeDOM();
 const completeArray = {'axiosData': {},'cheerioData': {}}
-var AutoComplete = new Class.autoComplete(); window.AutoComplete = AutoComplete;
+var AutoComplete ; window.AutoComplete = AutoComplete;
 var columnsOccupied = [0,0,0,0,0];
 var inMobileView;
 $(window).on('load resize',(i) => { // set inMobileView based on window size and focus first input box

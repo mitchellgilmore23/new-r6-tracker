@@ -9,7 +9,7 @@ export class autoComplete {
 		this.controller = new AbortController()
 		this.insertResults()
 	} 
-	axiosCall = () => axios.get(`https://r6.tracker.network/r6/autocomplete?name=${this.lookupName}&platform=${this.lookupPlatform}`, {
+	axiosCall = () => axios.get(`${proxy}/https://r6.tracker.network/r6/autocomplete?name=${this.lookupName}&platform=${this.lookupPlatform}`, {
 		signal : this.controller.signal }
 		)
 	
