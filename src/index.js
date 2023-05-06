@@ -8,6 +8,7 @@ const completeArray = {'axiosData': {},'cheerioData': {}}
 var AutoComplete = new Class.autoComplete(); window.AutoComplete = AutoComplete;
 var columnsOccupied = [0,0,0,0,0];
 var inMobileView;
+
 $(window).on('load resize',(i) => { // set inMobileView based on window size and focus first input box
   inMobileView = Common.mobileViewSetting();
   i.type =='load' && !inMobileView ? Common.focusNextInput(null,inMobileView) : null;
@@ -83,6 +84,7 @@ $(`button[attr='input-group-button-submit']`).on("click", (i) => { //Submit butt
   if (lookupName.val().length < 1) return;
   fetchRankedData(lookupName.val(),currentPlayerCol,lookupPlatform)
 });
+
 $("#clearForm").on("click", () => { // Clear Form button click
   Dom_Handler.initializeDOM();
   $(`.card`).attr('hidden',true);
@@ -111,8 +113,9 @@ window.dropdownClicked = async function (v,currentPlayerCol) { //Dropdown Click
   fetchRankedData(lookupName,currentPlayerCol,lookupPlatform);
   Common.focusNextInput(currentPlayerCol);
 };
-console.log(Common.bootstrap.Carousel.getOrCreateInstance('#carousel_mobile'))
 
+let carousel = Common.bootstrap.Carousel.getOrCreateInstance('#carousel_mobile')
+carousel.next();
 $('[attr=favorite-star-on-card').on('click', (i) => Favorite_Toast.main(i));  // Display favorite toast AND save Local Storage on Fav click
 $(document).on('click','[attr=offCanvas-player-button]', (i) =>{ // off-canvas favorite player clicked
   let {lookupName,lookupPlatform} = Off_Canvas.playerClicked(i);
