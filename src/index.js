@@ -111,6 +111,7 @@ window.dropdownClicked = async function (v,currentPlayerCol) { //Dropdown Click
   fetchRankedData(lookupName,currentPlayerCol,lookupPlatform);
   Common.focusNextInput(currentPlayerCol);
 };
+console.log(Common.bootstrap.Carousel.getOrCreateInstance('#carousel_mobile'))
 
 $('[attr=favorite-star-on-card').on('click', (i) => Favorite_Toast.main(i));  // Display favorite toast AND save Local Storage on Fav click
 $(document).on('click','[attr=offCanvas-player-button]', (i) =>{ // off-canvas favorite player clicked
