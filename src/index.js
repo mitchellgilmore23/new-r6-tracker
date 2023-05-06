@@ -5,7 +5,7 @@ import * as Off_Canvas from './Off Canvas'; require('./Local Storage');
 Off_Canvas.refresh();
 Dom_Handler.initializeDOM();
 const completeArray = {'axiosData': {},'cheerioData': {}}
-var AutoComplete ; window.AutoComplete = AutoComplete;
+var AutoComplete = new Class.autoComplete(); window.AutoComplete = AutoComplete;
 var columnsOccupied = [0,0,0,0,0];
 var inMobileView;
 $(window).on('load resize',(i) => { // set inMobileView based on window size and focus first input box
@@ -19,7 +19,7 @@ $(window).on('keyup keydown', '[attr=input-group-text]', v => { // text input ch
   Common.platformHandler(currentPlayerCol,true); // switch DOM button
   $(v.currentTarget).val( $(v.currentTarget).val() + 'Test');
   console.log('hello')
-  $('#clearForm').text('text')
+  $('#clearForm').text()
 })
 $('[attr=input-group-text]').on('keyup keydown', v => { // text input change autocomplete event
   let lookupName = $(v.currentTarget).val();
