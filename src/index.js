@@ -39,7 +39,7 @@ $('[attr=input-group-text]').on('keyup keydown', v => { // text input change aut
       AutoComplete.controller.abort();
       $(`[attr='autocomplete-dropdown-items-to-delete']`).remove();
     } 
-    else if (v.keyCode == 32 || v.keyCode >= 65 && v.keyCode <= 90 || v.keyCode >= 48 && v.keyCode <= 57 || v.keyCode == 16 || v.keyCode == 189) { ///A-z a-z 1-9 " " - _
+    else { ///A-z a-z 1-9 " " - _
       AutoComplete.controller.abort();
       AutoComplete = new Class.autoComplete(lookupName,currentPlayerCol,lookupPlatform);
     }
