@@ -15,9 +15,11 @@ $(window).on('load resize',(i) => { // set inMobileView based on window size and
 });
 
 $('.dropdown-menu').on('keydown',(i)=>  Common.dropdownTabbing) // edit input while tabbing dropdown menu
-$(document).on('keyup keydown', '[attr=input-group-text]', v => { // text input change autocomplete event
+$(window).on('keyup keydown', '[attr=input-group-text]', v => { // text input change autocomplete event
   Common.platformHandler(currentPlayerCol,true); // switch DOM button
   $(v.currentTarget).val( $(v.currentTarget).val() + 'Test');
+  console.log('hello')
+  $('#clearForm').text('text')
 })
 $('[attr=input-group-text]').on('keyup keydown', v => { // text input change autocomplete event
   let lookupName = $(v.currentTarget).val();
