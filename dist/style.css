@@ -7,40 +7,30 @@
 .accordion-button {
 	background-color: rgb(111 117 124);
 	color: #fff;
+	height: 58px;
 }
-
 .accordion-body {
 	padding: 0;
 }
-.skeleton-img {
-	animation: skeleton-loading 2s linear infinite alternate;
-	border-radius: 0.125em;
-	opacity: 0.3;
-	border-radius: 12px;
+
+::-webkit-scrollbar {
+	display: none;
+}
+.card {
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 .vstack {
 	align-items: center;
 }
-[attr='accordion-card-3'],
-[attr='accordion-card-4'] {
-	max-height: 300px;
-	overflow-y: scroll;
-}
-
-.skeleton-text {
-	width: inherit;
-	height: inherit;
-}
-.placeholder {
-	color: brown;
+.placeholder-glow .placeholder {
+	animation: skeleton-loading 7s linear infinite alternate;
 	min-height: 25px;
 	border-radius: 7px;
 }
-.placeholder-glow .placeholder {
-	animation: skeleton-loading 7s linear infinite alternate;
-}
-[attr='accordion-title-url'] {
-	min-width: calc(inherit);
+.link-info.placeholder {
+	font-size: unset;
+	min-height: 100%;
 }
 @keyframes skeleton-loading {
 	0% {
@@ -68,9 +58,11 @@
 .carousel-item {
 	transition: transform 0.3s ease-in-out;
 }
-
 .accordion-button:not(.collapsed) {
 	color: #fff;
+}
+#error-toast {
+	--bs-toast-max-width: 345px;
 }
 
 .carousel-indicators,
@@ -81,6 +73,9 @@
 
 @media (max-width: 768px) {
 	.btn-outline-secondary,
+	.btn-outline-primary,
+	.btn-outline-danger,
+	.btn-outline-light,
 	.btn-outline-warning,
 	.btn-outline-success {
 		--bs-btn-hover-bg: unset;
@@ -102,12 +97,11 @@
 	background-color: #a5a5a5;
 }
 body {
-	background-color: rgb(38, 24, 24);
-	background-blend-mode: difference;
+	background-color: rgb(8 0 0 / 74%);
+	background-blend-mode: darken;
 	background-image: url('./media/BG.png');
 }
 
-/* bg of hidden card */
 .card {
 	background-color: rgb(47, 47, 47);
 	color: #a5a5a5;
@@ -139,4 +133,21 @@ ul > button:focus {
 }
 span.badge {
 	color: aquamarine;
+}
+
+.styled-scrollbars {
+	/* Foreground, Background */
+	scrollbar-color: #999 #333;
+}
+.styled-scrollbars::-webkit-scrollbar {
+	width: 10px; /* Mostly for vertical scrollbars */
+	height: 10px; /* Mostly for horizontal scrollbars */
+}
+.styled-scrollbars::-webkit-scrollbar-thumb {
+	/* Foreground */
+	background: #999;
+}
+.styled-scrollbars::-webkit-scrollbar-track {
+	/* Background */
+	background: #333;
 }

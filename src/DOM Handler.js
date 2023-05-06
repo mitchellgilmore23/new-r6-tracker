@@ -7,28 +7,36 @@ export function togglePlaceholder(currentPlayerCol,show){
 window.initializeDOM = initializeDOM;
 export function initializeDOM(player){
   if (!player){
-    $(`inject[attr=buttonGroup]`).each((i,v) => $(v).replaceWith(defaultElements.buttonGroup(i)))
+    $(`inject[attr=buttonGroup]`).replaceWith(defaultElements.buttonGroup())
     $(`inject[attr=accordionCard1]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard1(i)))
     $(`inject[attr=accordionCard2]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard2(i))) 
     $(`inject[attr=accordionCard3]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard3(i))) 
-    $(`inject[attr=accordionCard4]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard4(i))) 
+    $(`inject[attr=accordionCard4]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard4(i)))
     $(`.placeholder`).attr('placeholder','placeholder')
+    // accordionHelper()
   }
   else {
-    $(`div[player=${player}] inject[attr=buttonGroup]`).each((i,v) => $(v).replaceWith(defaultElements.buttonGroup(i)))
-    $(`div[player=${player}] inject[attr=accordionCard1]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard1(i)))
-    $(`div[player=${player}] inject[attr=accordionCard2]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard2(i))) 
-    $(`div[player=${player}] inject[attr=accordionCard3]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard3(i))) 
-    $(`div[player=${player}] inject[attr=accordionCard4]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard4(i))) 
+    $(`div[player=${player}] inject[attr=buttonGroup]`).replaceWith(defaultElements.buttonGroup())
+    $(`div[player=${player}] inject[attr=accordionCard1]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard1(Math.random(),player)))
+    $(`div[player=${player}] inject[attr=accordionCard2]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard2(Math.random(),player))) 
+    $(`div[player=${player}] inject[attr=accordionCard3]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard3(Math.random(),player))) 
+    $(`div[player=${player}] inject[attr=accordionCard4]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard4(Math.random(),player))) 
     $(`div[player=${player}] .placeholder`).attr('placeholder','placeholder')
-    console.log(player)
-  }
+    // accordionHelper();
+  };
 };
+
+function accordionHelper () { // for each accordion collapse, assign the correct parent so when one opens, the rest collaspe
+  $('div[data-bs-parent]').each((i,v) => {
+    let parentAccordion=  $(v).parents('[id*=accordion]').attr('id')
+    $(v).attr('data-bs-parent','#'+parentAccordion);
+  });
+};
+
 export function hideCard(lookupColumn) {$(`div[player=${lookupColumn}] .card`).attr('hidden',true)};
 export function showCard(lookupColumn) {$(`div[player=${lookupColumn}] .card`).removeAttr('hidden')};
-
 export const defaultElements = {
-  buttonGroup: (i) => 
+  buttonGroup: () => 
   `<div class="btn-group w-100">
     <button class="btn rounded-2 btn-outline-success my-2 w-50" type="button" attr="input-group-button-submit" tabindex="-1">Submit</button>
     <button class="btn w-50 rounded-2 btn-outline-info my-2 w-50" type="button" attr="input-group-button-refresh" tabindex="-1" hidden>Refresh</button>
@@ -36,16 +44,18 @@ export const defaultElements = {
   <div class="input-group mb-1 mt-1">
     <input type="text" class="form-control" placeholder="Enter name.." attr="input-group-text" tabindex='-1' />
     <button class="btn btn-outline-secondary active" type="button" attr="input-group-button-xbox" tabindex="-1" data-bs-title="Use the backquote key (~) to change platforms on the fly!">
-      XBOX
+      <img src='./media/Xbox_Icon.svg' height='35px' style='fill:white;'>
     </button>
-    <button class="btn btn-outline-secondary" type="button" tabindex="-1" attr="input-group-button-ps">PS</button>
+    <button class="btn btn-outline-secondary" type="button" tabindex="-1" attr="input-group-button-ps">
+      <img src='./media/PlayStation_Icon.svg' height='35px' style='fill:white;'>
+    </button>
   </div>
 	<ul class="list-group dropdown-menu p-0"></ul>`,
-  accordionCard1: (i) => `
+  accordionCard1: (i,player) => `
 	<inject attr='accordionCard1'>
     <div class="accordion-item">
       <div class="accordion-header">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}1" aria-expanded="true" aria-controls="collapse${i}1" tabindex="-1">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}:${player}" aria-expanded="true" aria-controls="accordion${player}" tabindex="-1">
             <div class='d-flex flex-row align-items-center w-100'>
               <img card1="current_rank_img" class='placeholder' style="height: 50px; width:50px" />
               <div class='mx-3 vr align-self-center' style='height:38px'></div>
@@ -54,7 +64,7 @@ export const defaultElements = {
         </button>
       </div>
 
-      <div id="collapse${i}1" class="accordion-collapse collapse show" data-bs-parent="#accordion${i}">
+      <div id="collapse${i}:${player}" class="accordion-collapse collapse show" data-bs-parent='#accordion${player}'>
         <div class="accordion-body p-0">
           <div class="card m-0 rounded-0">
             <p class="fs-4 my-2 text-decoration-underline">Current</p>
@@ -105,11 +115,11 @@ export const defaultElements = {
     </div> 
 	<inject>`
   , 
-  accordionCard2: (i) => {return `
+  accordionCard2: (i,player) => {return `
   <inject attr='accordionCard2'>
     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}2" aria-expanded="false" aria-controls="collapse${i}2" tabindex="-1">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}:${player}" aria-expanded="false" aria-controls="accordion${player}" tabindex="-1">
         <div class='d-flex flex-row align-items-center w-100'>
         <img card2="max_rank_img" class='placeholder' style="height: 50px; width:50px" />
         <div class='mx-3 vr align-self-center' style='height:38px'></div>
@@ -117,7 +127,7 @@ export const defaultElements = {
       </div>
         </button>
       </h2>
-      <div id="collapse${i}2" class="accordion-collapse collapse" data-bs-parent="#accordion${i}">
+      <div id="collapse${i}:${player}" class="accordion-collapse collapse" data-bs-parent='#accordion${player}'>
         <div class="accordion-body p-0">
           <div class="card m-0 rounded-0" >
             <p class="fs-4 my-2 text-decoration-underline">Overall Ranked</p>
@@ -176,38 +186,38 @@ export const defaultElements = {
     </div>
     </inject>`
   }, 
-  accordionCard3: (i) => {return `
+  accordionCard3: (i,player) => {return `
   <inject attr='accordionCard3'>
     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}3" aria-expanded="false" aria-controls="collapse${i}3" tabindex="-1">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}:${player}" aria-expanded="false" aria-controls="accordion${player}" tabindex="-1">
           <div class="hstack gap-3">
             <i class="fa-solid fa-trophy" style="height: 35px"></i>
             <p class="m-0">Previous Seasons</p>
           </div>
         </button>
       </h2>
-      <div id="collapse${i}3" class="accordion-collapse collapse" data-bs-parent="#accordion${i}">
+      <div id="collapse${i}:${player}" class="accordion-collapse collapse" data-bs-parent='#accordion${player}'>
         <div class="accordion-body p-0">
-          <div class="card m-0 rounded-0" style="max-width: 740px; min-width: 100px"><div attr="accordion-card-3">
+          <div class="card m-0 rounded-0"><div attr="accordion-card-3">
           </div>
         </div>
       </div>
     </div>
   </inject>`
   }, 
-  accordionCard4: (i) => {return `
+  accordionCard4: (i,player) => {return `
   <inject attr='accordionCard4'>
     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}4" aria-expanded="false" aria-controls="collapse${i}4" tabindex="-1">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}:${player}" aria-expanded="false" aria-controls="accordion${player}" tabindex="-1">
           <div class="hstack gap-3">
             <i class="fa-solid fa-clock-rotate-left" style="height: 35px"></i>
             <p class="m-0">Recent Matches</p>
           </div>
         </button>
       </h2>
-      <div id="collapse${i}4" class="accordion-collapse collapse" data-bs-parent="#accordion${i}">
+      <div id="collapse${i}:${player}" class="accordion-collapse collapse" data-bs-parent='#accordion${player}'>
         <div class="accordion-body p-0">
           <div class="card m-0 rounded-0" style="max-width: 740px; min-width: 100px">
             <div class="row mx-0 py-1 border-bottom text-info">
@@ -232,8 +242,7 @@ export const defaultElements = {
   </inject>`
   }
 };
-
-export function main (currentPlayerCol,array,lookupName) {
+export function main (currentPlayerCol,array,lookupName,lookupPlatform) {
 	let colFilter = `div[player=${currentPlayerCol}]`;
   let arr = array.main;
   $(`${colFilter} [attr=card-header]`).attr('href', array.main[0][0] ||'http://www.google.com').text(array.main[0][1]);
@@ -258,7 +267,6 @@ export function main (currentPlayerCol,array,lookupName) {
   if (mmrVsRp == 'rp') $(`${colFilter} [card2=max_rank_img]`).attr('src', arr[5][0].src)
   else if (mmrVsRp =='mmr') $(`${colFilter} [card2=max_rank_img]`).attr('src', arr[6][0].src)
   //body
-
   $(`${colFilter} [card2=body_kills_per_match]`).text(addOffset(arr[1],'Kills/match',1))
   $(`${colFilter} [card2=body_kills_per_min]`).text(addOffset(arr[1],'Kills/min',1))
   $(`${colFilter} [card2=body_time_played]`).text(String(addOffset(arr[1],'Time Played',1)).indexOf('#') >= 0 ? "--" : addOffset(arr[1],'Time Played',1))
@@ -282,9 +290,7 @@ export function main (currentPlayerCol,array,lookupName) {
   ////////////////////////////////
   console.log(lookupName,currentPlayerCol,array)
   togglePlaceholder(currentPlayerCol,false)
-  mmrOrRp(arr)
 };
-
 export function seasons(currentPlayerCol,completeArray) {
   $(`div[player=${currentPlayerCol}] [attr=seasonsInject]`).remove()
   const addOffsettoSeasonal = (array, value, offset = 1) => completeArray.seasons[array].indexOf(`${value}`) == -1  ? "N/A" : completeArray.seasons[array][completeArray.seasons[array].indexOf(`${value}`) + offset];
@@ -309,7 +315,6 @@ export function seasons(currentPlayerCol,completeArray) {
     $(`div[player=${currentPlayerCol}] [attr=accordion-card-3]`).append(seasonsTemplate(seasonName, KD, rank, Matches, imgSource));
   });
 };
-
 export function matches(currentPlayerCol,completeArray) {
   $(`div[player=${currentPlayerCol}] [attr=matchesInject]`).remove()
   const matchesTemplate = (date, mmr, mmrChange, result, imgSource, KD, humanTime) => {
@@ -345,8 +350,11 @@ export function initializeDOMForNewPlayer(currentPlayerCol,inMobileView) {
   inMobileView ? $(`[player=${currentPlayerCol}] [attr=input-group-text]`).eq(1).val('') : $(`[player=${currentPlayerCol}] [attr=input-group-text]`).eq(0).val(''); //clear input
   $(`[attr='autocomplete-dropdown-items-to-delete']`).remove(); //clear autocomplete
   $(`div[player=${currentPlayerCol}] [attr=card-header]`).text('') //clear header
+  AutoComplete.controller.abort();
   showCard(currentPlayerCol); //show card
   $(`div[player=${currentPlayerCol}] [attr='input-group-button-refresh']`).removeAttr('hidden') // show refresh button
+  initializeDOM(currentPlayerCol,inMobileView); //refresh DOM for only one column
+  $('.accordion-body .card').css('max-height',$(window).outerHeight() - 474);
 }
 function addOffset(array, value, offset = 1) {
   if (!array.find((element) => element === value)) return 'N/A' 
