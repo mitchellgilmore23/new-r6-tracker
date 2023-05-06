@@ -3,7 +3,8 @@ import Error_Toast from "./Error Toast";
 export const $ = require("jquery"); window.$= $
 export const bootstrap = require("bootstrap");
 export var carouselPage= 1;
-export const mobileCarousel = new bootstrap.Carousel(document.querySelector('#carousel_mobile'))
+const mobileCarousel = new bootstrap.Carousel(document.querySelector('#carousel_mobile'),{touch:true});
+
 document.querySelector('#carousel_mobile').addEventListener('slide.bs.carousel',(e) => carouselPage = e.to + 1) // on mobile carousel cycle, change var carouselPage to match
 
 //////////////////////////////
