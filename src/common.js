@@ -14,11 +14,6 @@ export const dropdownTabbing = (i) => i.keyCode !== 9 && i.keyCode !==13 ? $(`[p
 export const mobileViewSetting = () => $(window).width() < 768 ? true : false
 export const mobileAccordionHelper = () => $('.accordion-body .card').css('max-height',$(window).outerHeight() - 474);
 
-export function errorHandler(message,currentPlayerCol) {
-  Dom_Handler.hideCard(currentPlayerCol)
-	$(`div[player=${currentPlayerCol}] [attr=input-group-button-refresh]`).attr('hidden','')
-	Error_Toast(message)
-};
 export function platformHandler(playerCol,toggle=false){ // toggle or GET platform
 	let buttonGroup =$(`[player='${playerCol}']`).children('.input-group').children('button')
 	let xbox = buttonGroup.filter('[attr=input-group-button-xbox]')

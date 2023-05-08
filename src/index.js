@@ -1,6 +1,7 @@
 const $ = Common.$; import * as Common from './common'; import  * as Class  from "./Auto-Complete Class"; import * as Dom_Handler from "./DOM Handler";
 import * as Fetch from "./Fetch"; import * as Parser from "./Parser"; import * as Local_Storage from "./Local Storage"; import * as Favorite_Toast from './Favorite Toast';
 import * as Off_Canvas from './Off Canvas'; require('./Local Storage'); import * as Swipe from './Swipe'
+import ErrorToast from './Error Toast';
 
 Dom_Handler.initializeDOM();
 Off_Canvas.refresh();
@@ -89,29 +90,29 @@ $(document).on('click', event => {
   let lookupColumn = target.parents('[player]')
   let lookupPlatform = Common.platformHandler(lookupColumn.attr('player'));
 
-  if (target.filter('div.input-group > [attr*=input-group-button],div.input-group > [attr*=input-group-button] > img').length > 0) { ////Platform Button
+  if (target.filter('div.input-group > [attr*=input-group-button],div.input-group > [attr*=input-group-button] > img').length > 0) { //Platform Button
     AutoComplete.controller.abort(); // stop auto-complete
     Common.platformHandler(lookupColumn.attr('player'),true); // toggle Physical platform button and return new platform
     if (lookupName.val().length < 1) return;
     AutoComplete = new Class.autoComplete(lookupName.val(),lookupColumn.attr('player'),lookupPlatform);
   }
-  if (target.filter('#clearForm').length > 0){ ///////////////////////////////////////////////////Clear All Button
+  if (target.filter('#clearForm').length > 0){ ////////////////////////////////////////////////////////////////////////////////////////Clear All Button
     $(`.card`).attr('hidden',true);
     $('[attr="input-group-button-refresh"]').attr('hidden','');
     columnsOccupied = [0,0,0,0,0];
   }
-  if (target.filter('button[attr=input-group-button-submit]').length > 0) { //////////////////////Submit Button
+  if (target.filter('button[attr=input-group-button-submit]').length > 0) { ///////////////////////////////////////////////////////////Submit Button
     if (lookupName.length < 1) return;
     console.log(lookupName)
     fetchRankedData(lookupName.val(),lookupColumn.attr('player'),lookupPlatform);
   }
-  if (target.filter('button[attr=input-group-button-refresh]').length > 0) { /////////////////////Refresh Button
+  if (target.filter('button[attr=input-group-button-refresh]').length > 0) { //////////////////////////////////////////////////////////Refresh Button
     fetchRankedData(lookupColumn.find('[attr=card-header]').text(),lookupColumn.attr('player'),lookupPlatform)
   }
   if (target.filter('button[attr=favorite-star-on-card],button[attr=favorite-star-on-card] > img').length > 0) { /////////////////////Save favorite Button
     Favorite_Toast.main(lookupColumn.find('[attr=card-header]').text(),lookupColumn,lookupPlatform)
   }
-  if (target.filter('button[attr=offCanvas-player-button]').length > 0) { /////////////////////Off-Canvas Player Button
+  if (target.filter('button[attr=offCanvas-player-button]').length > 0) { //////////////////////////////////////////////////////////////Off-Canvas Player Button
     lookupName = target.text();
     lookupPlatform = target.attr('platform');
     if (!inMobileView){
@@ -130,8 +131,7 @@ $(document).on('click', event => {
     let type = target.parents('[attr=offCanvas-recent-players],[attr=offCanvas-favorites]').attr('attr') == 'offCanvas-favorites' ? 'favorites' : 'recents';
     Local_Storage.removeStorage(lookupName,type);
   }
-
-  if (target.filter('ul.dropdown-menu > button, ul.dropdown-menu > button > p, ul.dropdown-menu > button > span').length > 0) { ///////////////////// Dropdown Menu
+  if (target.filter('ul.dropdown-menu > button, ul.dropdown-menu > button > p, ul.dropdown-menu > button > span').length > 0) { /////// Dropdown Menu
     if (target.filter('button').length > 0) {
       lookupName = target.children('p').text()
       lookupColumn = target.children('p').attr('col')
@@ -148,18 +148,14 @@ $(document).on('click', event => {
     AutoComplete.controller.abort();
     fetchRankedData(lookupName,lookupColumn,lookupPlatform)
   }
-  else {  ////////////////////////////////////////////////////////////////////////////////////////////////ELSE clean up.. 
+  else {  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////ELSE clean up.. 
     AutoComplete.controller.abort();
     $(`[attr=autocomplete-dropdown-items-to-delete]`).length >0 ? $(`[attr=autocomplete-dropdown-items-to-delete]`).remove() : null;
-    return false;
   }
 });
 
-
-
-Swipe.addSwipeEvent(document, 'swipeLeft',()=> Common.cycleMobileCarousel('next'));
-Swipe.addSwipeEvent(document, 'swipeRight',()=> Common.cycleMobileCarousel('prev'));
-
+Swipe.addSwipeEvent(document, 'swipeLeft',() => Common.cycleMobileCarousel('next'));
+Swipe.addSwipeEvent(document, 'swipeRight',() => Common.cycleMobileCarousel('prev'));
 
 function fetchRankedData (lookupName,currentPlayerCol,lookupPlatform) {
   console.log(lookupName,currentPlayerCol,lookupPlatform);
@@ -179,9 +175,11 @@ function fetchRankedData (lookupName,currentPlayerCol,lookupPlatform) {
   
   })
   .catch(error => {
-    console.log(error);
-    Common.errorHandler(error,currentPlayerCol);
+    ErrorToast(error,lookupName,lookupPlatform);
     columnsOccupied[currentPlayerCol -1] = 0;
+    $(`div[player=${currentPlayerCol}] [attr=input-group-button-refresh]`).attr('hidden',''); // hide the refresh button
+    $(`[player=${currentPlayerCol}]`).find('.card').attr('hidden',''); // hide the card with no results
+
   })
 
   Fetch.seasons(lookupName,lookupPlatform).then(response => {
