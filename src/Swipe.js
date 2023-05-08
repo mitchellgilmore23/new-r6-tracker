@@ -9,6 +9,8 @@ export function addSwipeEvent(theDom, eventName, handleEvent) {
 		var moveAbsVal = Math.abs(moveVal);
 		if (moveVal < 0 && moveAbsVal > swipeAmt && eventName=="swipeLeft") handleEvent();
 		if (moveVal>0 && moveAbsVal> swipeAmt && eventName=="swipeRight") handleEvent();
+		$('[attr=input-group-text]').text(moveVal)
+		console.log(moveVal)
 	});
 	theDom.addEventListener('mouseup', (e) => {
 		var moveVal = eEnd-eStart;
