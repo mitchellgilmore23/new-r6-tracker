@@ -102,8 +102,7 @@ $(document).on('click', event => {
     columnsOccupied = [0,0,0,0,0];
   }
   if (target.filter('button[attr=input-group-button-submit]').length > 0) { ///////////////////////////////////////////////////////////Submit Button
-    if (lookupName.length < 1) return;
-    console.log(lookupName)
+    if (lookupName.val().length < 1) return;
     fetchRankedData(lookupName.val(),lookupColumn.attr('player'),lookupPlatform);
   }
   if (target.filter('button[attr=input-group-button-refresh]').length > 0) { //////////////////////////////////////////////////////////Refresh Button
@@ -158,7 +157,6 @@ Swipe.addSwipeEvent(document, 'swipeLeft',() => Common.cycleMobileCarousel('next
 Swipe.addSwipeEvent(document, 'swipeRight',() => Common.cycleMobileCarousel('prev'));
 
 function fetchRankedData (lookupName,currentPlayerCol,lookupPlatform) {
-  console.log(lookupName,currentPlayerCol,lookupPlatform);
   Dom_Handler.showPlaceholder(currentPlayerCol)   
   Fetch.main(lookupName,lookupPlatform).then(response => {
     completeArray.axiosData.main = response.data
@@ -170,7 +168,6 @@ function fetchRankedData (lookupName,currentPlayerCol,lookupPlatform) {
     Favorite_Toast.handleFavoriteStarOnLoad(currentPlayerCol,completeArray.cheerioData.main[0][1],lookupPlatform);
     columnsOccupied[currentPlayerCol -1] = 1;
   }).then(() => {
-    console.log(completeArray)
     Dom_Handler.main(currentPlayerCol,completeArray.cheerioData,lookupName,inMobileView)
   
   })

@@ -19,8 +19,8 @@ export class autoComplete {
 			let ulDiv = $(`[player=${this.currentPlayerCol}] ul`)
 			response.data.forEach((item, index) => {
 				var buttonAttrs =	`
-				class="list-group-item d-flex justify-content-between align-items-center rounded-2 w-100" tabindex="${index +1}" attr='autocomplete-dropdown-items-to-delete'`
-				var newHtml =`<button ${buttonAttrs}><p class='mb-0' col='${this.currentPlayerCol}'>${item.name}</p><span class="badge rounded-pill">Level ${item.cl}</span></button>`
+				class="list-group-item d-flex justify-content-between align-items-center w-100" tabindex="${index +1}" attr='autocomplete-dropdown-items-to-delete'`
+				var newHtml =`<button ${buttonAttrs}><p class='mb-0 pe-5' col='${this.currentPlayerCol}'>${item.name}</p><span class="badge rounded-pill">Level ${item.cl}</span></button>`
 				ulDiv.append(newHtml)
 			})
 		}).catch(error => cancelledAutoComplete(error))
