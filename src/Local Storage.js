@@ -21,5 +21,4 @@ export function fetchStorage() {
 		});
 	});
 	return sortedLocalStorage;
-	/// v[0] = player name, v[1] = favorites|recents, v[2] = platform
 };

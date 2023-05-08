@@ -28,18 +28,15 @@ export function templates(add,lookupName,lookupPlatform,randomNum) {
 	};
 };
 
-export function main(i) {
-	let randomNum = Math.floor(i.timeStamp/100);
+export function main(lookupName,lookupColumn,lookupPlatform) {
+	let randomNum = Math.round(Math.random() * 1000)
   let add = true;
-  let lookupColumn = $(i.currentTarget).parents('[player]').attr("player") * 1
-  let lookupPlatform = Common.platformHandler(lookupColumn);
-  let lookupName = $(i.currentTarget).parent().siblings('div.col-9').children().text();
-  let starIcon = $(`div[player=${lookupColumn}]`).find('img[width=24px]');
+  let starIcon = lookupColumn.find('img[width=24px]');
   if(starIcon.attr('src').indexOf('Filled') !== -1){
     starIcon.attr('src','./media/Empty Star.svg');
     add = false;
     Local_Storage.removeStorage(lookupName,'favorites')
-  } 
+  }
   else { 
     starIcon.attr('src','./media/Filled Star.svg');
     add = true;

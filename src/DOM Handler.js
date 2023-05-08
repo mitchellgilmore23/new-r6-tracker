@@ -1,40 +1,5 @@
 const $ = require("jquery")
-import {default as rankImg } from "./Rank-Img"
-export function togglePlaceholder(currentPlayerCol,show){
-  var colFilter = `div[player=${currentPlayerCol || 1}]`
-  show ? $(`${colFilter} [placeholder=placeholder]`).addClass('placeholder') : $(`${colFilter} [placeholder=placeholder]`).removeClass('placeholder')
-}
-window.initializeDOM = initializeDOM;
-export function initializeDOM(player){
-  if (!player){
-    $(`inject[attr=buttonGroup]`).replaceWith(defaultElements.buttonGroup())
-    $(`inject[attr=accordionCard1]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard1(i)))
-    $(`inject[attr=accordionCard2]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard2(i))) 
-    $(`inject[attr=accordionCard3]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard3(i))) 
-    $(`inject[attr=accordionCard4]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard4(i)))
-    $(`.placeholder`).attr('placeholder','placeholder')
-    // accordionHelper()
-  }
-  else {
-    $(`div[player=${player}] inject[attr=buttonGroup]`).replaceWith(defaultElements.buttonGroup())
-    $(`div[player=${player}] inject[attr=accordionCard1]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard1(Math.random(),player)))
-    $(`div[player=${player}] inject[attr=accordionCard2]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard2(Math.random(),player))) 
-    $(`div[player=${player}] inject[attr=accordionCard3]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard3(Math.random(),player))) 
-    $(`div[player=${player}] inject[attr=accordionCard4]`).each((i,v) => $(v).replaceWith(defaultElements.accordionCard4(Math.random(),player))) 
-    $(`div[player=${player}] .placeholder`).attr('placeholder','placeholder')
-    // accordionHelper();
-  };
-};
-
-function accordionHelper () { // for each accordion collapse, assign the correct parent so when one opens, the rest collaspe
-  $('div[data-bs-parent]').each((i,v) => {
-    let parentAccordion=  $(v).parents('[id*=accordion]').attr('id')
-    $(v).attr('data-bs-parent','#'+parentAccordion);
-  });
-};
-
-export function hideCard(lookupColumn) {$(`div[player=${lookupColumn}] .card`).attr('hidden',true)};
-export function showCard(lookupColumn) {$(`div[player=${lookupColumn}] .card`).removeAttr('hidden')};
+import {default as rankImg } from "./Rank-Img";
 export const defaultElements = {
   buttonGroup: () => 
   `<div class="btn-group w-100">
@@ -51,11 +16,11 @@ export const defaultElements = {
     </button>
   </div>
 	<ul class="list-group dropdown-menu p-0"></ul>`,
-  accordionCard1: (i,player) => `
+  accordionCard1: (i) => `
 	<inject attr='accordionCard1'>
     <div class="accordion-item">
       <div class="accordion-header">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}:${player}" aria-expanded="true" aria-controls="accordion${player}" tabindex="-1">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1-${i}" aria-expanded="true" aria-controls="accordion${i}" tabindex="-1">
             <div class='d-flex flex-row align-items-center w-100'>
               <img card1="current_rank_img" class='placeholder' style="height: 50px; width:50px" />
               <div class='mx-3 vr align-self-center' style='height:38px'></div>
@@ -64,7 +29,7 @@ export const defaultElements = {
         </button>
       </div>
 
-      <div id="collapse${i}:${player}" class="accordion-collapse collapse show" data-bs-parent='#accordion${player}'>
+      <div id="collapse1-${i}" class="accordion-collapse collapse show" data-bs-parent='#accordion${i}'>
         <div class="accordion-body p-0">
           <div class="card m-0 rounded-0">
             <p class="fs-4 my-2 text-decoration-underline">Current</p>
@@ -115,11 +80,11 @@ export const defaultElements = {
     </div> 
 	<inject>`
   , 
-  accordionCard2: (i,player) => {return `
+  accordionCard2: (i) => {return `
   <inject attr='accordionCard2'>
     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}:${player}" aria-expanded="false" aria-controls="accordion${player}" tabindex="-1">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2-${i}" aria-expanded="false" aria-controls="accordion${i}" tabindex="-1">
         <div class='d-flex flex-row align-items-center w-100'>
         <img card2="max_rank_img" class='placeholder' style="height: 50px; width:50px" />
         <div class='mx-3 vr align-self-center' style='height:38px'></div>
@@ -127,7 +92,7 @@ export const defaultElements = {
       </div>
         </button>
       </h2>
-      <div id="collapse${i}:${player}" class="accordion-collapse collapse" data-bs-parent='#accordion${player}'>
+      <div id="collapse2-${i}" class="accordion-collapse collapse" data-bs-parent='#accordion${i}'>
         <div class="accordion-body p-0">
           <div class="card m-0 rounded-0" >
             <p class="fs-4 my-2 text-decoration-underline">Overall Ranked</p>
@@ -186,18 +151,18 @@ export const defaultElements = {
     </div>
     </inject>`
   }, 
-  accordionCard3: (i,player) => {return `
+  accordionCard3: (i) => {return `
   <inject attr='accordionCard3'>
     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}:${player}" aria-expanded="false" aria-controls="accordion${player}" tabindex="-1">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3-${i}" aria-expanded="false" aria-controls="accordion${i}" tabindex="-1">
           <div class="hstack gap-3">
             <i class="fa-solid fa-trophy" style="height: 35px"></i>
             <p class="m-0">Previous Seasons</p>
           </div>
         </button>
       </h2>
-      <div id="collapse${i}:${player}" class="accordion-collapse collapse" data-bs-parent='#accordion${player}'>
+      <div id="collapse3-${i}" class="accordion-collapse collapse" data-bs-parent='#accordion${i}'>
         <div class="accordion-body p-0">
           <div class="card m-0 rounded-0"><div attr="accordion-card-3">
           </div>
@@ -206,18 +171,18 @@ export const defaultElements = {
     </div>
   </inject>`
   }, 
-  accordionCard4: (i,player) => {return `
+  accordionCard4: (i) => {return `
   <inject attr='accordionCard4'>
     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}:${player}" aria-expanded="false" aria-controls="accordion${player}" tabindex="-1">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4-${i}" aria-expanded="false" aria-controls="accordion${i}" tabindex="-1">
           <div class="hstack gap-3">
             <i class="fa-solid fa-clock-rotate-left" style="height: 35px"></i>
             <p class="m-0">Recent Matches</p>
           </div>
         </button>
       </h2>
-      <div id="collapse${i}:${player}" class="accordion-collapse collapse" data-bs-parent='#accordion${player}'>
+      <div id="collapse4-${i}" class="accordion-collapse collapse" data-bs-parent='#accordion${i}'>
         <div class="accordion-body p-0">
           <div class="card m-0 rounded-0" style="max-width: 740px; min-width: 100px">
             <div class="row mx-0 py-1 border-bottom text-info">
@@ -242,7 +207,7 @@ export const defaultElements = {
   </inject>`
   }
 };
-export function main (currentPlayerCol,array,lookupName,lookupPlatform) {
+export function main (currentPlayerCol,array,lookupName) {
 	let colFilter = `div[player=${currentPlayerCol}]`;
   let arr = array.main;
   $(`${colFilter} [attr=card-header]`).attr('href', array.main[0][0] ||'http://www.google.com').text(array.main[0][1]);
@@ -288,8 +253,25 @@ export function main (currentPlayerCol,array,lookupName,lookupPlatform) {
   $(`${colFilter} [card2=footer_losses]`).text(addOffset(arr[1],'Losses',1))
   $(`${colFilter} [card2=footer_win_]`).text(addOffset(arr[1],'Win %',1))
   ////////////////////////////////
-  console.log(lookupName,currentPlayerCol,array)
-  togglePlaceholder(currentPlayerCol,false)
+  console.log(lookupName,currentPlayerCol,array);
+  $(`div[player=${currentPlayerCol}]`).find('.placeholder').removeClass('placeholder') // remove placeholder 
+  // helper function
+  function mmrOrRp(arr){ 
+    let result;
+    if (arr[5].find((element) => element === 'Personal Record') && arr[6].find((element) => element === 'Personal Record')){ //Personal Record on BOTH rp and mmr
+      let bestRP = arr[5][arr[5].indexOf('Personal Record') +1].replace(/[A-Za-z ,]/g, '') *1
+      let bestMMR = arr[6][arr[6].indexOf('Personal Record') +1].replace(/[A-Za-z ,]/g, '') *1
+      bestRP <= bestMMR ? result = 'mmr' : result = 'rp';
+      return result;
+    }
+    else if(arr[5].find((element) => element === 'Personal Record')) return 'rp'
+    else if (arr[6].find((element) => element === 'Personal Record')) return 'mmr'
+    else return false;
+  };
+  function addOffset(array, value, offset = 1)  {
+    if (array.find((element) => element === value)) return array[array.indexOf(`${value}`) + offset]
+    else return 'N/A'
+  };
 };
 export function seasons(currentPlayerCol,completeArray) {
   $(`div[player=${currentPlayerCol}] [attr=seasonsInject]`).remove()
@@ -346,32 +328,29 @@ export function matches(currentPlayerCol,completeArray) {
     $(`div[player=${currentPlayerCol}] [attr=accordion-card-4]`).append(matchesTemplate(date, mmr, mmrChange, result(), imgSource, KD, humanTime));
   });
 };
-export function initializeDOMForNewPlayer(currentPlayerCol,inMobileView) {
-  if (inMobileView) {
-    $(`[player=${currentPlayerCol}] [attr=input-group-text]`).eq(1).val('')
-  }
-  else {
-    $(`[player=${currentPlayerCol}] [attr=input-group-text]`).eq(0).val('');
-  }
-
-  $(`[attr='autocomplete-dropdown-items-to-delete']`).remove(); //clear autocomplete
-  $(`div[player=${currentPlayerCol}] [attr=card-header]`).text('') //clear header
-  AutoComplete.controller.abort();
-  showCard(currentPlayerCol); //show card
-  $(`div[player=${currentPlayerCol}] [attr='input-group-button-refresh']`).removeAttr('hidden') // show refresh button
-  initializeDOM(currentPlayerCol,inMobileView); //refresh DOM for only one column
+export function initializeDOM(){ // run on page start
+  $('[player][desktop]').find('[attr=accordionCard1]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard1(i+1)))
+  $('[player][desktop]').find('[attr=accordionCard2]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard2(i+1)))
+  $('[player][desktop]').find('[attr=accordionCard3]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard3(i+1)))
+  $('[player][desktop]').find('[attr=accordionCard4]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard4(i+1)))
+  $('[player][mobile]' ).find('[attr=accordionCard1]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard1(i+6)))
+  $('[player][mobile]' ).find('[attr=accordionCard2]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard2(i+6)))
+  $('[player][mobile]' ).find('[attr=accordionCard3]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard3(i+6)))
+  $('[player][mobile]' ).find('[attr=accordionCard4]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard4(i+6)))
+};
+export function showPlaceholder(currentPlayerCol) {
+  currentPlayerCol = currentPlayerCol * 1
+  $(`div[player=${currentPlayerCol}] [attr=card-header]`).text('').addClass('placeholder') // add placeholder
+  $(`[player=${currentPlayerCol}] [attr=input-group-text]`).val('') // clear input
+  $(`[player=${currentPlayerCol}][desktop]`).find(`[attr=accordionCard1]`).replaceWith(defaultElements.accordionCard1(currentPlayerCol))
+  $(`[player=${currentPlayerCol}][desktop]`).find(`[attr=accordionCard2]`).replaceWith(defaultElements.accordionCard2(currentPlayerCol))
+  $(`[player=${currentPlayerCol}][desktop]`).find(`[attr=accordionCard3]`).replaceWith(defaultElements.accordionCard3(currentPlayerCol))
+  $(`[player=${currentPlayerCol}][desktop]`).find(`[attr=accordionCard4]`).replaceWith(defaultElements.accordionCard4(currentPlayerCol))
+  $(`[player=${currentPlayerCol}][mobile]`).find(`[attr=accordionCard1]`).replaceWith(defaultElements.accordionCard1(currentPlayerCol + 5))
+  $(`[player=${currentPlayerCol}][mobile]`).find(`[attr=accordionCard2]`).replaceWith(defaultElements.accordionCard2(currentPlayerCol + 5))
+  $(`[player=${currentPlayerCol}][mobile]`).find(`[attr=accordionCard3]`).replaceWith(defaultElements.accordionCard3(currentPlayerCol + 5))
+  $(`[player=${currentPlayerCol}][mobile]`).find(`[attr=accordionCard4]`).replaceWith(defaultElements.accordionCard4(currentPlayerCol + 5))
   $('.accordion-body .card').css('max-height',$(window).outerHeight() - 474);
-}
-function addOffset(array, value, offset = 1)  { !array.find((element) => element === value) ? 'N/A' : array[array.indexOf(`${value}`) + offset] }
-function mmrOrRp(arr){ 
-  let result;
-  if (arr[5].find((element) => element === 'Personal Record') && arr[6].find((element) => element === 'Personal Record')){ //Personal Record on BOTH rp and mmr
-    let bestRP = arr[5][arr[5].indexOf('Personal Record') +1].replace(/[A-Za-z ,]/g, '') *1
-    let bestMMR = arr[6][arr[6].indexOf('Personal Record') +1].replace(/[A-Za-z ,]/g, '') *1
-    bestRP <= bestMMR ? result = 'mmr' : result = 'rp';
-    return result;
-  }
-  else if(arr[5].find((element) => element === 'Personal Record')) return 'rp'
-  else if (arr[6].find((element) => element === 'Personal Record')) return 'mmr'
-  else return false;
-}
+  $(`div[player=${currentPlayerCol}]`).find('[attr=input-group-button-refresh]').removeAttr('hidden') // show refresh button
+  $(`[player=${currentPlayerCol}]`).find('.card').removeAttr('hidden');// finally, show the card
+};

@@ -2,8 +2,8 @@ const $ = Common.$; import * as Common from './common'; import  * as Class  from
 import * as Fetch from "./Fetch"; import * as Parser from "./Parser"; import * as Local_Storage from "./Local Storage"; import * as Favorite_Toast from './Favorite Toast';
 import * as Off_Canvas from './Off Canvas'; require('./Local Storage'); import * as Swipe from './Swipe'
 
-Off_Canvas.refresh();
 Dom_Handler.initializeDOM();
+Off_Canvas.refresh();
 const completeArray = {'axiosData': {},'cheerioData': {}}
 var AutoComplete = new Class.autoComplete(); window.AutoComplete = AutoComplete;
 var columnsOccupied = [0,0,0,0,0];
@@ -12,139 +12,158 @@ var inMobileView;
 $(window).on('load resize',(i) => { // set inMobileView based on window size and focus first input box
   inMobileView = Common.mobileViewSetting();
   i.type =='load' && !inMobileView ? Common.focusNextInput(null,inMobileView) : null;
-  Common.mobileAccordionHelper() 
+  Common.mobileAccordionHelper();
+  $(`inject[attr=buttonGroup]`).replaceWith(Dom_Handler.defaultElements.buttonGroup())
+
 });
 
-$('.dropdown-menu').on('keydown',(i)=>  Common.dropdownTabbing) // edit input while tabbing dropdown menu
-
-$(document).on('keyup keydown', '[attr=input-group-text]', v => { // text input change autocomplete event
-  let lookupName = $(v.currentTarget).val();
-	let currentPlayerCol= $(v.currentTarget).parents('[player]').attr('player') * 1;
-  let lookupPlatform = Common.platformHandler(currentPlayerCol);
-  if (v.type == 'keyup') {
-    if (v.keyCode == 192) { // ` Key
+$(document).on('keyup', (event) => { 
+  let target = $(event.target)
+  if (target.is('[attr=input-group-text]')) { // text input change autocomplete event
+    let lookupName = target.val();
+    let lookupColumn= target.parents('[player]').attr('player');
+    let lookupPlatform = Common.platformHandler(lookupColumn);
+    if (event.originalEvent.keyCode == 192) { // ` Key
       AutoComplete.controller.abort();
       $(`[attr='autocomplete-dropdown-items-to-delete']`).remove();
-      Common.platformHandler(currentPlayerCol,true); // switch DOM button
-      lookupPlatform =Common.platformHandler(currentPlayerCol)
-      lookupName = $(v.currentTarget).val().slice(0,$(v.currentTarget).val().length-1)// remove ` char from name
-      $(v.currentTarget).val(lookupName);
-      AutoComplete = new Class.autoComplete(lookupName,currentPlayerCol,lookupPlatform);
+      Common.platformHandler(lookupColumn,true); // switch DOM button
+      lookupPlatform =Common.platformHandler(lookupColumn)
+      lookupName = target.val().slice(0,target.val().length-1) // remove ` char from name
+      target.val(lookupName);
+      AutoComplete = new Class.autoComplete(lookupName,lookupColumn,lookupPlatform);
+      event.stopPropagation();
+      return false;
     }
-    else if (lookupName.length < 2) { //dont run until more than 2 chars are entered, else remove autocomplete
+    if (lookupName.length < 2) { //dont run until more than 2 chars are entered, else remove autocomplete
       AutoComplete.controller.abort();
       $(`[attr='autocomplete-dropdown-items-to-delete']`).remove();
+      return false;
     } 
-    else { ///A-z a-z 1-9 " " - _
+    else { // run autocomplete with normal characters
       AutoComplete.controller.abort();
-      AutoComplete = new Class.autoComplete(lookupName,currentPlayerCol,lookupPlatform);
+      AutoComplete = new Class.autoComplete(lookupName,lookupColumn,lookupPlatform);
     }
   }
-  else if (v.type == 'keydown') {
-    if (v.keyCode == 13){ //Enter Key
+  if (target.is('.list-group-item')) { // if tabbing through autocomplete dropdown, text change returns to text box
+    Common.dropdownTabbing(event);
+  }
+});
+
+$(document).on('keydown', (event) => {
+  let target = $(event.target)
+  if (target.is('[attr=input-group-text]')) { // text input change autocomplete event
+    let lookupName = target.val();
+    let lookupColumn= target.parents('[player]').attr('player') * 1;
+    let lookupPlatform = Common.platformHandler(lookupColumn);
+    if (event.originalEvent.keyCode == 13){ //Enter Key
       AutoComplete.controller.abort();
       $(`[attr='autocomplete-dropdown-items-to-delete']`).remove();
-      if (lookupName.length > 0 ) {
-        fetchRankedData(lookupName,currentPlayerCol,lookupPlatform);
-      } 
-      Common.focusNextInput(currentPlayerCol); 
+      if (lookupName.length > 0) fetchRankedData(lookupName,lookupColumn,lookupPlatform);
+      Common.focusNextInput(lookupColumn); 
     };
-    if (v.keyCode == 9) {// Tab Key
+    if (event.originalEvent.keyCode == 9) {    // Tab Key
+      AutoComplete.controller.abort();
       if (inMobileView) {
-        if ($(`[player=${currentPlayerCol}] ul`).eq(1).children().length > 0) return;
+        if ($(`[player=${lookupColumn}] ul`).eq(1).children().length > 0) return;
         else {
-          v.preventDefault();
-          Common.focusNextInput(currentPlayerCol,true); 
+          event.preventDefault();
+          Common.focusNextInput(lookupColumn,true); 
         }
+        return;
       }
-      else if (!inMobileView) {
-        if ($(`[player=${currentPlayerCol}] ul`).eq(0).children().length > 0) return;
+      if (!inMobileView) {
+        if ($(`[player=${lookupColumn}] ul`).eq(0).children().length > 0) return;
         else {
-          v.preventDefault();
-          Common.focusNextInput(currentPlayerCol); 
+          Common.focusNextInput(lookupColumn); 
+          event.preventDefault();
         }
       }
     }
   }
 });
 
-$("div.input-group [attr*='input-group-button']").on("click",v=>{ //platform button click
-	var lookupName = $(v.currentTarget).siblings('input').val();
-	let currentPlayerCol= $(v.currentTarget).parents('[player]').attr('player') * 1;
-	Common.platformHandler(currentPlayerCol,true);
-  AutoComplete.controller.abort();
-  if (lookupName.length < 1) return;
-	AutoComplete = new Class.autoComplete(lookupName,currentPlayerCol,Common.platformHandler(currentPlayerCol));
+$(document).on('click', event => {
+
+  let target = $(event.target)
+  let lookupName = target.parents('[player]').find('[attr=input-group-text]');
+  let lookupColumn = target.parents('[player]')
+  let lookupPlatform = Common.platformHandler(lookupColumn.attr('player'));
+
+  if (target.filter('div.input-group > [attr*=input-group-button],div.input-group > [attr*=input-group-button] > img').length > 0) { ////Platform Button
+    AutoComplete.controller.abort(); // stop auto-complete
+    Common.platformHandler(lookupColumn.attr('player'),true); // toggle Physical platform button and return new platform
+    if (lookupName.val().length < 1) return;
+    AutoComplete = new Class.autoComplete(lookupName.val(),lookupColumn.attr('player'),lookupPlatform);
+  }
+  if (target.filter('#clearForm').length > 0){ ///////////////////////////////////////////////////Clear All Button
+    $(`.card`).attr('hidden',true);
+    $('[attr="input-group-button-refresh"]').attr('hidden','');
+    columnsOccupied = [0,0,0,0,0];
+  }
+  if (target.filter('button[attr=input-group-button-submit]').length > 0) { //////////////////////Submit Button
+    if (lookupName.length < 1) return;
+    console.log(lookupName)
+    fetchRankedData(lookupName.val(),lookupColumn.attr('player'),lookupPlatform);
+  }
+  if (target.filter('button[attr=input-group-button-refresh]').length > 0) { /////////////////////Refresh Button
+    fetchRankedData(lookupColumn.find('[attr=card-header]').text(),lookupColumn.attr('player'),lookupPlatform)
+  }
+  if (target.filter('button[attr=favorite-star-on-card],button[attr=favorite-star-on-card] > img').length > 0) { /////////////////////Save favorite Button
+    Favorite_Toast.main(lookupColumn.find('[attr=card-header]').text(),lookupColumn,lookupPlatform)
+  }
+  if (target.filter('button[attr=offCanvas-player-button]').length > 0) { /////////////////////Off-Canvas Player Button
+    lookupName = target.text();
+    lookupPlatform = target.attr('platform');
+    if (!inMobileView){
+      let columnToInject = Common.findFirstAvailableColumn(columnsOccupied);
+      fetchRankedData(lookupName,columnToInject,lookupPlatform);
+      Off_Canvas.offCanvas.hide();
+    }
+    else { // do this for mobile devices
+      let columnToInject = Common.carouselPage
+      fetchRankedData(lookupName,columnToInject,lookupPlatform);
+      Off_Canvas.offCanvas.hide();
+    }  
+  }
+  if (target.filter('button[attr=offCanvas-trash-button],button[attr=offCanvas-trash-button] > img').length > 0) { /////////////////////Off-Canvas Delete Button
+    let lookupName = target.parents('.row').find('[platform]').text();
+    let type = target.parents('[attr=offCanvas-recent-players],[attr=offCanvas-favorites]').attr('attr') == 'offCanvas-favorites' ? 'favorites' : 'recents';
+    Local_Storage.removeStorage(lookupName,type);
+  }
+
+  if (target.filter('ul.dropdown-menu > button, ul.dropdown-menu > button > p, ul.dropdown-menu > button > span').length > 0) { ///////////////////// Dropdown Menu
+    if (target.filter('button').length > 0) {
+      lookupName = target.children('p').text()
+      lookupColumn = target.children('p').attr('col')
+    }
+    if (target.filter('p').length > 0) {
+      lookupName = target.text()
+      lookupColumn = target.attr('col')
+    }
+    if (target.filter('span').length > 0) {
+      lookupName = target.siblings('p').text()
+      lookupColumn = target.siblings('p').attr('col')
+    }   
+    $('[attr=autocomplete-dropdown-items-to-delete]').remove();
+    AutoComplete.controller.abort();
+    fetchRankedData(lookupName,lookupColumn,lookupPlatform)
+  }
+  else {  ////////////////////////////////////////////////////////////////////////////////////////////////ELSE clean up.. 
+    AutoComplete.controller.abort();
+    $(`[attr=autocomplete-dropdown-items-to-delete]`).length >0 ? $(`[attr=autocomplete-dropdown-items-to-delete]`).remove() : null;
+    return false;
+  }
 });
 
-$(`button[attr='input-group-button-submit']`).on("click", (i) => { //Submit button click
-  let currentPlayerCol = $(i.currentTarget).parents('[player]').attr("player") * 1
-  let lookupName = inMobileView ? $(`[player=${currentPlayerCol}] [attr=input-group-text]`).eq(1) : $(`[player=${currentPlayerCol}] [attr=input-group-text]`).eq(0);
-  let lookupPlatform = Common.platformHandler(currentPlayerCol);
-  if (lookupName.val().length < 1) return;
-  fetchRankedData(lookupName.val(),currentPlayerCol,lookupPlatform)
-});
 
-$("#clearForm").on("click", () => { // Clear Form button click
-  Dom_Handler.initializeDOM();
-  $(`.card`).attr('hidden',true);
-  $('[attr="input-group-button-refresh"]').attr('hidden','');
-  columnsOccupied = [0,0,0,0,0];
-});
 
-$(`button[attr='input-group-button-refresh']`).on("click", (i) => { //Refresh button click
-  let currentPlayerCol = $(i.currentTarget).parents('[player]').attr("player") * 1
-  let lookupPlatform = Common.platformHandler(currentPlayerCol);
-  let lookupName = $(i.currentTarget).parents('[player]').find('[attr=card-header]').text();
-  fetchRankedData(lookupName,currentPlayerCol,lookupPlatform);
-});
-
-$('html').on("click",(i) =>{ // clear dropdown on window click
-  AutoComplete.controller.abort();
-  if ($(`[attr=autocomplete-dropdown-items-to-delete]`).length > 0) {
-    $(`[attr=autocomplete-dropdown-items-to-delete]`).remove()
-  };
-});
-
-window.dropdownClicked = async function (v,currentPlayerCol) { //Dropdown Click
-  let lookupName = v[0].childNodes[0].data;
-  let lookupPlatform = Common.platformHandler(currentPlayerCol);
-  AutoComplete.controller.abort();
-  fetchRankedData(lookupName,currentPlayerCol,lookupPlatform);
-  Common.focusNextInput(currentPlayerCol);
-};
 Swipe.addSwipeEvent(document, 'swipeLeft',()=> Common.cycleMobileCarousel('next'));
 Swipe.addSwipeEvent(document, 'swipeRight',()=> Common.cycleMobileCarousel('prev'));
 
 
-
-
-$('[attr=favorite-star-on-card').on('click', (i) => Favorite_Toast.main(i));  // Display favorite toast AND save Local Storage on Fav click
-$(document).on('click','[attr=offCanvas-player-button]', (i) =>{ // off-canvas favorite player clicked
-  let {lookupName,lookupPlatform} = Off_Canvas.playerClicked(i);
-  if (!inMobileView){
-    let columnToInject = Common.findFirstAvailableColumn(columnsOccupied);
-    fetchRankedData(lookupName,columnToInject,lookupPlatform);
-    Off_Canvas.offCanvas.hide();
-  }
-  else { // do this for mobile devices
-    let columnToInject = Common.carouselPage
-    fetchRankedData(lookupName,columnToInject,lookupPlatform);
-    Off_Canvas.offCanvas.hide();
-  }
-}); 
-$(document).on('click', '[attr=offCanvas-trash-button]',(i) => { // offcanvas player delete button press
-  let {lookupName,type} = Off_Canvas.trashClicked(i);
-  Local_Storage.removeStorage(lookupName,type);
-});
-
-
-
-
 function fetchRankedData (lookupName,currentPlayerCol,lookupPlatform) {
-  Dom_Handler.initializeDOMForNewPlayer(currentPlayerCol,inMobileView) 
-  Dom_Handler.togglePlaceholder(currentPlayerCol,true);
-  
+  console.log(lookupName,currentPlayerCol,lookupPlatform);
+  Dom_Handler.showPlaceholder(currentPlayerCol)   
   Fetch.main(lookupName,lookupPlatform).then(response => {
     completeArray.axiosData.main = response.data
     Parser.main(completeArray)
@@ -154,8 +173,16 @@ function fetchRankedData (lookupName,currentPlayerCol,lookupPlatform) {
     Local_Storage.setStorage(completeArray.cheerioData.main[0][1],lookupPlatform,'recents');
     Favorite_Toast.handleFavoriteStarOnLoad(currentPlayerCol,completeArray.cheerioData.main[0][1],lookupPlatform);
     columnsOccupied[currentPlayerCol -1] = 1;
-  }).then(() => Dom_Handler.main(currentPlayerCol,completeArray.cheerioData,lookupName))
-  .catch(error => Common.errorHandler(error,currentPlayerCol))
+  }).then(() => {
+    console.log(completeArray)
+    Dom_Handler.main(currentPlayerCol,completeArray.cheerioData,lookupName,inMobileView)
+  
+  })
+  .catch(error => {
+    console.log(error);
+    Common.errorHandler(error,currentPlayerCol);
+    columnsOccupied[currentPlayerCol -1] = 0;
+  })
 
   Fetch.seasons(lookupName,lookupPlatform).then(response => {
     completeArray.axiosData.seasonsHistory = response.data

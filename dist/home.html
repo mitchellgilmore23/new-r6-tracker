@@ -54,7 +54,7 @@
 	<body>
 		<div class="container-fluid d-none d-md-flex" style="display: flex; flex-direction: column">
 			<div class="row">
-				<div class="col-md-6 col-lg-4 col-xxl" player="1">
+				<div class="col-md-6 col-lg-4 col-xxl" player="1" desktop>
 					<inject attr="buttonGroup"></inject>
 					<div class="card border-light text-center mt-3 z-1 placeholder-glow" hidden>
 						<div class="row my-2">
@@ -75,7 +75,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6 col-lg-4 col-xxl" player="2">
+				<div class="col-md-6 col-lg-4 col-xxl" player="2" desktop>
 					<inject attr="buttonGroup"></inject>
 					<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 						<div class="row my-2">
@@ -96,7 +96,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6 col-lg-4 col-xxl" player="3">
+				<div class="col-md-6 col-lg-4 col-xxl" player="3" desktop>
 					<inject attr="buttonGroup"></inject>
 					<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 						<div class="row my-2">
@@ -117,7 +117,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6 col-lg-4 col-xxl" player="4">
+				<div class="col-md-6 col-lg-4 col-xxl" player="4" desktop>
 					<inject attr="buttonGroup"></inject>
 					<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 						<div class="row my-2">
@@ -138,7 +138,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6 col-lg-4 col-xxl" player="5">
+				<div class="col-md-6 col-lg-4 col-xxl" player="5" desktop>
 					<inject attr="buttonGroup"></inject>
 					<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 						<div class="row my-2">
@@ -163,28 +163,7 @@
 		</div>
 		<!--Mobile Devices -->
 		<div id="carousel_mobile" class="carousel slide d-flex d-md-none" data-bs-interval="false" data-bs-touch="false" data-bs-ride="false">
-			<div class="carousel-item active" player="1">
-				<inject attr="buttonGroup"></inject>
-				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
-					<div class="row my-2">
-						<div class="col-9">
-							<a class="link-info ms-2 ps-2 pt-1 text-start placeholder" style="display: flex; font-size: 22px; flex-direction: column" attr="card-header" target="_blank" tabindex="-1"></a>
-						</div>
-						<div class="col-3" style="display: flex; justify-content: center">
-							<button class="btn btn-outline-light placeholder" attr="favorite-star-on-card" style="display: flex">
-								<img src="./media/Empty Star.svg" width="24px" />
-							</button>
-						</div>
-					</div>
-					<div class="accordion" id="accordion5">
-						<inject attr="accordionCard1"></inject>
-						<inject attr="accordionCard2"></inject>
-						<inject attr="accordionCard3"></inject>
-						<inject attr="accordionCard4"></inject>
-					</div>
-				</div>
-			</div>
-			<div class="carousel-item" player="2">
+			<div class="carousel-item active" player="1" mobile>
 				<inject attr="buttonGroup"></inject>
 				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 					<div class="row my-2">
@@ -205,7 +184,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="carousel-item" player="3">
+			<div class="carousel-item" player="2" mobile>
 				<inject attr="buttonGroup"></inject>
 				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 					<div class="row my-2">
@@ -226,7 +205,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="carousel-item" player="4">
+			<div class="carousel-item" player="3" mobile>
 				<inject attr="buttonGroup"></inject>
 				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 					<div class="row my-2">
@@ -247,7 +226,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="carousel-item" player="5">
+			<div class="carousel-item" player="4" mobile>
 				<inject attr="buttonGroup"></inject>
 				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
 					<div class="row my-2">
@@ -261,6 +240,27 @@
 						</div>
 					</div>
 					<div class="accordion" id="accordion9">
+						<inject attr="accordionCard1"></inject>
+						<inject attr="accordionCard2"></inject>
+						<inject attr="accordionCard3"></inject>
+						<inject attr="accordionCard4"></inject>
+					</div>
+				</div>
+			</div>
+			<div class="carousel-item" player="5" mobile>
+				<inject attr="buttonGroup"></inject>
+				<div class="card border-light lh-sm text-center mt-3 z-1 placeholder-glow" hidden>
+					<div class="row my-2">
+						<div class="col-9">
+							<a class="link-info ms-2 ps-2 pt-1 text-start placeholder" style="display: flex; font-size: 22px; flex-direction: column" attr="card-header" target="_blank" tabindex="-1"></a>
+						</div>
+						<div class="col-3" style="display: flex; justify-content: center">
+							<button class="btn btn-outline-light placeholder" attr="favorite-star-on-card" style="display: flex">
+								<img src="./media/Empty Star.svg" width="24px" />
+							</button>
+						</div>
+					</div>
+					<div class="accordion" id="accordion10">
 						<inject attr="accordionCard1"></inject>
 						<inject attr="accordionCard2"></inject>
 						<inject attr="accordionCard3"></inject>

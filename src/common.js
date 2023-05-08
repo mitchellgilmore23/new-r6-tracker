@@ -1,6 +1,5 @@
 import * as Dom_Handler from './DOM Handler';
 import Error_Toast from "./Error Toast";
-import * as Swipe from "./Swipe";
 export const $ = require("jquery"); window.$= $
 export const bootstrap = require("bootstrap");
 export var carouselPage= 1;
@@ -13,7 +12,7 @@ document.querySelector('#carousel_mobile').addEventListener('slide.bs.carousel',
 // event listener helpers
 export const dropdownTabbing = (i) => i.keyCode !== 9 && i.keyCode !==13 ? $(`[player=${$(i.target).parents('[player]').attr('player')}] [attr=input-group-text]`).eq(0).focus() : null
 export const mobileViewSetting = () => $(window).width() < 768 ? true : false
-export const mobileAccordionHelper = () =>   $('.accordion-body .card').css('max-height',$(window).outerHeight() - 474);
+export const mobileAccordionHelper = () => $('.accordion-body .card').css('max-height',$(window).outerHeight() - 474);
 
 export function errorHandler(message,currentPlayerCol) {
   Dom_Handler.hideCard(currentPlayerCol)
@@ -24,13 +23,13 @@ export function platformHandler(playerCol,toggle=false){ // toggle or GET platfo
 	let buttonGroup =$(`[player='${playerCol}']`).children('.input-group').children('button')
 	let xbox = buttonGroup.filter('[attr=input-group-button-xbox]')
 	let ps = buttonGroup.filter('[attr=input-group-button-ps]')
-	let platform;
-	if (toggle == true){
-		buttonGroup.each((_,v) => $(v).toggleClass("active"))
-		return;
+	let platform = xbox.hasClass('active') && !ps.hasClass('active') ? "xbox" : "psn";
+	if (toggle == true) {
+		buttonGroup.toggleClass("active")
+		return platform;
 	}
 	else if (toggle == false) xbox.hasClass('active') && !ps.hasClass('active') ? platform = "xbox" : platform = "psn";
-	return platform;
+		return platform;
 };
 export function focusNextInput(currentPlayerCol,inMobileView) { // to do
 	if (!currentPlayerCol) currentPlayerCol = 0;
