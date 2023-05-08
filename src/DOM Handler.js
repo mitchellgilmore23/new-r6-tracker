@@ -53,7 +53,7 @@ export const defaultElements = {
                 <img card1="record_img" class="placeholder mb-2" style="width: 70px;height:70px"/>
 							</div>
             </div>
-            <div class="hstack m-2 my-4 text-truncate">
+            <div class="hstack m-2 my-4">
               <div class="vstack">
                 <p class="card-text mb-0">Matches:</p>
                 <p card1="footer_matches" class="card-text placeholder col-6"></p>
@@ -124,7 +124,7 @@ export const defaultElements = {
               <img card2="max_rank_img" class="placeholder" style="width: 70px;height:70px"/>
             </div>
           </div>
-          <div class="hstack m-2 my-4 text-truncate">
+          <div class="hstack m-2 my-4">
           <div class="vstack">
             <p class="card-text mb-0">Matches:</p>
             <p card2="footer_matches" class="card-text placeholder col-6"></p>

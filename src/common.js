@@ -1,5 +1,3 @@
-import * as Dom_Handler from './DOM Handler';
-import Error_Toast from "./Error Toast";
 export const $ = require("jquery"); window.$= $
 export const bootstrap = require("bootstrap");
 export var carouselPage= 1;

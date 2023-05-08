@@ -1,6 +1,6 @@
 const $ = Common.$; import * as Common from './common'; import  * as Class  from "./Auto-Complete Class"; import * as Dom_Handler from "./DOM Handler";
 import * as Fetch from "./Fetch"; import * as Parser from "./Parser"; import * as Local_Storage from "./Local Storage"; import * as Favorite_Toast from './Favorite Toast';
-import * as Off_Canvas from './Off Canvas'; require('./Local Storage'); import * as Swipe from './Swipe'
+import * as Off_Canvas from './Off Canvas'; require('./Local Storage'); import * as Swipe from './Swipe'; import * as Welcome_Modal from './Welcome Modal'
 import ErrorToast from './Error Toast';
 
 Dom_Handler.initializeDOM();
@@ -15,7 +15,7 @@ $(window).on('load resize',(i) => { // set inMobileView based on window size and
   i.type =='load' && !inMobileView ? Common.focusNextInput(null,inMobileView) : null;
   Common.mobileAccordionHelper();
   $(`inject[attr=buttonGroup]`).replaceWith(Dom_Handler.defaultElements.buttonGroup())
-
+  localStorage.getItem('showWelcomeModal') == 'false' ? null: Welcome_Modal.welcomeModal.show();
 });
 
 $(document).on('keyup', (event) => { 
@@ -147,10 +147,15 @@ $(document).on('click', event => {
     AutoComplete.controller.abort();
     fetchRankedData(lookupName,lookupColumn,lookupPlatform)
   }
+  if (target.filter('[welcomemodal=dontShowAgain]').length > 0){
+    localStorage.setItem('showWelcomeModal','false')
+  }
   else {  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////ELSE clean up.. 
     AutoComplete.controller.abort();
     $(`[attr=autocomplete-dropdown-items-to-delete]`).length >0 ? $(`[attr=autocomplete-dropdown-items-to-delete]`).remove() : null;
   }
+
+ 
 });
 
 Swipe.addSwipeEvent(document, 'swipeLeft',() => Common.cycleMobileCarousel('next'));
