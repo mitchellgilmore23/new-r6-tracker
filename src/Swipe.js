@@ -1,5 +1,5 @@
 export function addSwipeEvent(theDom, eventName, handleEvent) {
-	var swipeAmt = 200
+	var swipeAmt = 150
 	var eStart=0, eEnd=0;
 	theDom.addEventListener('touchstart',(e) =>  eStart = e.targetTouches[0].clientX)
 	theDom.addEventListener('mousedown', (e) => eStart = e.clientX)
