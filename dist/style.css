@@ -18,7 +18,7 @@
 }
 .card {
 	overflow-y: scroll;
-	overflow-x: hidden;
+	overflow-x: hidden !important;
 }
 .vstack {
 	align-items: center;
@@ -150,7 +150,4 @@ span.badge {
 .styled-scrollbars::-webkit-scrollbar-track {
 	/* Background */
 	background: #333;
-}
-* {
-	overflow-x: hidden;
 }
