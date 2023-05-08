@@ -151,3 +151,6 @@ span.badge {
 	/* Background */
 	background: #333;
 }
+* {
+	overflow-x: hidden;
+}
