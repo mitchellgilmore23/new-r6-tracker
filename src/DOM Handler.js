@@ -347,7 +347,13 @@ export function matches(currentPlayerCol,completeArray) {
   });
 };
 export function initializeDOMForNewPlayer(currentPlayerCol,inMobileView) {
-  inMobileView ? $(`[player=${currentPlayerCol}] [attr=input-group-text]`).eq(1).val('') : $(`[player=${currentPlayerCol}] [attr=input-group-text]`).eq(0).val(''); //clear input
+  if (inMobileView) {
+    $(`[player=${currentPlayerCol}] [attr=input-group-text]`).eq(1).val('')
+  }
+  else {
+    $(`[player=${currentPlayerCol}] [attr=input-group-text]`).eq(0).val('');
+  }
+
   $(`[attr='autocomplete-dropdown-items-to-delete']`).remove(); //clear autocomplete
   $(`div[player=${currentPlayerCol}] [attr=card-header]`).text('') //clear header
   AutoComplete.controller.abort();
@@ -356,10 +362,7 @@ export function initializeDOMForNewPlayer(currentPlayerCol,inMobileView) {
   initializeDOM(currentPlayerCol,inMobileView); //refresh DOM for only one column
   $('.accordion-body .card').css('max-height',$(window).outerHeight() - 474);
 }
-function addOffset(array, value, offset = 1) {
-  if (!array.find((element) => element === value)) return 'N/A' 
-  else return array[array.indexOf(`${value}`) + offset]
-}
+function addOffset(array, value, offset = 1)  { !array.find((element) => element === value) ? 'N/A' : array[array.indexOf(`${value}`) + offset] }
 function mmrOrRp(arr){ 
   let result;
   if (arr[5].find((element) => element === 'Personal Record') && arr[6].find((element) => element === 'Personal Record')){ //Personal Record on BOTH rp and mmr

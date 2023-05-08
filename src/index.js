@@ -1,6 +1,6 @@
 const $ = Common.$; import * as Common from './common'; import  * as Class  from "./Auto-Complete Class"; import * as Dom_Handler from "./DOM Handler";
 import * as Fetch from "./Fetch"; import * as Parser from "./Parser"; import * as Local_Storage from "./Local Storage"; import * as Favorite_Toast from './Favorite Toast';
-import * as Off_Canvas from './Off Canvas'; require('./Local Storage');
+import * as Off_Canvas from './Off Canvas'; require('./Local Storage'); import * as Swipe from './Swipe'
 
 Off_Canvas.refresh();
 Dom_Handler.initializeDOM();
@@ -113,8 +113,11 @@ window.dropdownClicked = async function (v,currentPlayerCol) { //Dropdown Click
   fetchRankedData(lookupName,currentPlayerCol,lookupPlatform);
   Common.focusNextInput(currentPlayerCol);
 };
+Swipe.addSwipeEvent(document, 'swipeLeft',()=> Common.cycleMobileCarousel('next'));
+Swipe.addSwipeEvent(document, 'swipeRight',()=> Common.cycleMobileCarousel('prev'));
 
-let carousel = Common.bootstrap.Carousel.getOrCreateInstance('#carousel_mobile')
+
+
 
 $('[attr=favorite-star-on-card').on('click', (i) => Favorite_Toast.main(i));  // Display favorite toast AND save Local Storage on Fav click
 $(document).on('click','[attr=offCanvas-player-button]', (i) =>{ // off-canvas favorite player clicked
@@ -141,7 +144,7 @@ $(document).on('click', '[attr=offCanvas-trash-button]',(i) => { // offcanvas pl
 function fetchRankedData (lookupName,currentPlayerCol,lookupPlatform) {
   Dom_Handler.initializeDOMForNewPlayer(currentPlayerCol,inMobileView) 
   Dom_Handler.togglePlaceholder(currentPlayerCol,true);
-
+  
   Fetch.main(lookupName,lookupPlatform).then(response => {
     completeArray.axiosData.main = response.data
     Parser.main(completeArray)

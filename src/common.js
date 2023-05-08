@@ -1,9 +1,11 @@
 import * as Dom_Handler from './DOM Handler';
 import Error_Toast from "./Error Toast";
+import * as Swipe from "./Swipe";
 export const $ = require("jquery"); window.$= $
 export const bootstrap = require("bootstrap");
 export var carouselPage= 1;
-new bootstrap.Carousel(document.querySelector('#carousel_mobile'),{touch:true});
+
+const carousel = new bootstrap.Carousel(document.querySelector('#carousel_mobile'));
 
 document.querySelector('#carousel_mobile').addEventListener('slide.bs.carousel',(e) => carouselPage = e.to + 1) // on mobile carousel cycle, change var carouselPage to match
 
@@ -34,20 +36,22 @@ export function focusNextInput(currentPlayerCol,inMobileView) { // to do
 	if (!currentPlayerCol) currentPlayerCol = 0;
 	currentPlayerCol = currentPlayerCol * 1
 	if (inMobileView){
-		new bootstrap.Carousel($('#carousel_mobile')).next()
-		if (currentPlayerCol == 5) $(`[player=1] [attr=input-group-text]`).eq(1).focus()
-		else $(`[player=${currentPlayerCol +1}] [attr=input-group-text]`).eq(1).focus()
+		carousel.next();
+		currentPlayerCol == 5 ? $(`[player=1] [attr=input-group-text]`).eq(1).focus() : $(`[player=${currentPlayerCol +1}] [attr=input-group-text]`).eq(1).focus()
 	}
 	else {
 		if (currentPlayerCol == 5) $(`[player=1] [attr=input-group-text]`).eq(0).focus()
 		else $(`[player=${currentPlayerCol +1}] [attr=input-group-text]`).eq(0).focus()
 	}
 };
-export function findFirstAvailableColumn(columnsOccupied){
-if (columnsOccupied[0] == 0) return 1
-if (columnsOccupied[1] == 0) return 2
-if (columnsOccupied[2] == 0) return 3
-if (columnsOccupied[3] == 0) return 4
-if (columnsOccupied[4] == 0) return 5
-else return 1
+export function cycleMobileCarousel(direction){
+	direction == 'prev' ? carousel.prev() : carousel.next()
 }
+export function findFirstAvailableColumn(columnsOccupied){
+	if (columnsOccupied[0] == 0) return 1
+	if (columnsOccupied[1] == 0) return 2
+	if (columnsOccupied[2] == 0) return 3
+	if (columnsOccupied[3] == 0) return 4
+	if (columnsOccupied[4] == 0) return 5
+	else return 1
+};
