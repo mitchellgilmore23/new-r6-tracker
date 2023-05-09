@@ -1,6 +1,6 @@
 const $ = Common.$; import * as Common from './common'; import  * as Class  from "./Auto-Complete Class"; import * as Dom_Handler from "./DOM Handler";
 import * as Fetch from "./Fetch"; import * as Parser from "./Parser"; import * as Local_Storage from "./Local Storage"; import * as Favorite_Toast from './Favorite Toast';
-import * as Off_Canvas from './Off Canvas'; require('./Local Storage'); import * as Swipe from './Swipe'; import * as Welcome_Modal from './Welcome Modal'
+import * as Off_Canvas from './Off Canvas'; require('./Local Storage'); import * as Swipe from './Swipe'; import Welcome_Modal from './Welcome Modal'
 import ErrorToast from './Error Toast';
 
 Dom_Handler.initializeDOM();
@@ -15,7 +15,10 @@ $(window).on('load resize',(i) => { // set inMobileView based on window size and
   i.type =='load' && !inMobileView ? Common.focusNextInput(null,inMobileView) : null;
   Common.mobileAccordionHelper();
   $(`inject[attr=buttonGroup]`).replaceWith(Dom_Handler.defaultElements.buttonGroup())
-  localStorage.getItem('showWelcomeModal') == 'false' ? null: Welcome_Modal.welcomeModal.show();
+  localStorage.removeItem('showWelcomeModal')
+  if (localStorage.getItem('showWelcomeModal2') !== 'false') {
+    Welcome_Modal().show()
+  } 
 });
 
 $(document).on('keyup', (event) => { 
@@ -148,7 +151,7 @@ $(document).on('click', event => {
     fetchRankedData(lookupName,lookupColumn,lookupPlatform)
   }
   if (target.filter('[welcomemodal=dontShowAgain]').length > 0){
-    localStorage.setItem('showWelcomeModal','false')
+    localStorage.setItem('showWelcomeModal2','false')
   }
   else {  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////ELSE clean up.. 
     AutoComplete.controller.abort();
@@ -170,7 +173,7 @@ function fetchRankedData (lookupName,currentPlayerCol,lookupPlatform) {
     completeArray.cheerioData.main[0][0] = completeArray.cheerioData.main[0][0].replace('https://tracker-proxy.herokuapp.com/','')
     Off_Canvas.refresh();
     Local_Storage.setStorage(completeArray.cheerioData.main[0][1],lookupPlatform,'recents');
-    Favorite_Toast.handleFavoriteStarOnLoad(currentPlayerCol,completeArray.cheerioData.main[0][1],lookupPlatform);
+    Favorite_Toast.handleFavoriteStarOnLoad(currentPlayerCol,completeArray.cheerioData.main[0][1]);
     columnsOccupied[currentPlayerCol -1] = 1;
   }).then(() => {
     Dom_Handler.main(currentPlayerCol,completeArray.cheerioData,lookupName,inMobileView)

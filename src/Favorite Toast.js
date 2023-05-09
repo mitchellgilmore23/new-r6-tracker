@@ -45,11 +45,13 @@ export function main(lookupName,lookupColumn,lookupPlatform) {
   let toastTemplate = templates(add,lookupName,lookupPlatform,randomNum);
   $('[attr=favorite-toast]').append(toastTemplate);
   $('[attr=favorite-toast]').children().each((i,e) => i > 5 ? $('[attr=favorite-toast]').children().eq(0).remove() : null);
-  new bootstrap.Toast($(`[attr=${randomNum}]`),{animation: true,delay: 3000}).show();
+  new bootstrap.Toast($(`[attr=${randomNum}]`),{
+		animation: true,delay: 3000
+	}).show();
   Off_Canvas.refresh();
 }
 
-export function handleFavoriteStarOnLoad(currentPlayerCol,lookupName,lookupPlatform) {
+export function handleFavoriteStarOnLoad(currentPlayerCol,lookupName) {
 	let starIcon = $(`div[player=${currentPlayerCol}]`).find('img[width=24px]');
 	let playerisFavorite = localStorage.getItem(lookupName+':favorites') !== null
 	playerisFavorite ? starIcon.attr('src','./media/Filled Star.svg') : starIcon.attr('src','./media/Empty Star.svg');
