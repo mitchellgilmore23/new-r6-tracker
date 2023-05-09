@@ -1,6 +1,5 @@
 import * as Off_Canvas from './Off Canvas';
 const bootstrap = require('bootstrap');
-import * as Common from './common';
 import * as Local_Storage from './Local Storage';
 export function templates(add,lookupName,lookupPlatform,randomNum) {
 	if (add){

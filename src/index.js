@@ -12,13 +12,16 @@ var inMobileView;
 
 $(window).on('load resize',(i) => { // set inMobileView based on window size and focus first input box
   inMobileView = Common.mobileViewSetting();
-  i.type =='load' && !inMobileView ? Common.focusNextInput(null,inMobileView) : null;
+  if(i.type =='load') {
+    if (!inMobileView) Common.focusNextInput(null,inMobileView)
+    localStorage.removeItem('showWelcomeModal')
+    if (localStorage.getItem('showWelcomeModal2') !== 'false') {
+      Welcome_Modal().show()
+    } 
+  }
   Common.mobileAccordionHelper();
   $(`inject[attr=buttonGroup]`).replaceWith(Dom_Handler.defaultElements.buttonGroup())
-  localStorage.removeItem('showWelcomeModal')
-  if (localStorage.getItem('showWelcomeModal2') !== 'false') {
-    Welcome_Modal().show()
-  } 
+
 });
 
 $(document).on('keyup', (event) => { 
