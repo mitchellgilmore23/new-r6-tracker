@@ -14,7 +14,7 @@ $(window).on('load resize',(i) => { // set inMobileView based on window size and
   inMobileView = Common.mobileViewSetting();
   if(i.type =='load') {
     if (!inMobileView) Common.focusNextInput(null,inMobileView)
-    localStorage.removeItem('showWelcomeModal')
+    localStorage.removeItem('showWelcomeModal')// TO REMOVE. just clear old local storage if already stored
     if (localStorage.getItem('showWelcomeModal2') !== 'false') {
       Welcome_Modal().show()
     } 
