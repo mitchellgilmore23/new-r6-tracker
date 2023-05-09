@@ -152,6 +152,7 @@ $(document).on('click', event => {
     $('[attr=autocomplete-dropdown-items-to-delete]').remove();
     AutoComplete.controller.abort();
     fetchRankedData(lookupName,lookupColumn,lookupPlatform)
+    Common.focusNextInput(lookupColumn); 
   }
   if (target.filter('[welcomemodal=dontShowAgain]').length > 0){ ////////////////////////////////////////////////////////////////////// Welcome Modal Dont show again Button
     localStorage.setItem('showWelcomeModal2','false')
