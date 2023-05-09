@@ -138,3 +138,7 @@ span.badge {
 .form-control::placeholder {
 	color: #a7a7a7;
 }
+p {
+	display: flex;
+	justify-content: center;
+}
