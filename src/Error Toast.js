@@ -3,7 +3,7 @@ const $ = require('jquery');
 const errorToast = new bootstrap.Toast($('#error-toast'),{
 	animation: true,
 	autohide: true,
-	delay: 1000 * 40
+	delay: 5000
 });
 const toastBody = $('#error-toast-body');
 const toastHeader = $('#error-toast-header');
