@@ -153,7 +153,7 @@ $(document).on('click', event => {
     AutoComplete.controller.abort();
     fetchRankedData(lookupName,lookupColumn,lookupPlatform)
   }
-  if (target.filter('[welcomemodal=dontShowAgain]').length > 0){
+  if (target.filter('[welcomemodal=dontShowAgain]').length > 0){ ////////////////////////////////////////////////////////////////////// Welcome Modal Dont show again Button
     localStorage.setItem('showWelcomeModal2','false')
   }
   else {  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////ELSE clean up.. 

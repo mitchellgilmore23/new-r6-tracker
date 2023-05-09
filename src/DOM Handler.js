@@ -251,7 +251,7 @@ export function main (currentPlayerCol,array,lookupName) {
   $(`${colFilter} [card2=footer_matches]`).text(addOffset(arr[1],'Matches',1).replace(/[A-Za-z ]/g, ''))
   $(`${colFilter} [card2=footer_wins]`).text(addOffset(arr[1],'Wins',1))
   $(`${colFilter} [card2=footer_losses]`).text(addOffset(arr[1],'Losses',1))
-  $(`${colFilter} [card2=footer_win_]`).text(addOffset(arr[1],'Win %',1))
+  $(`${colFilter} [card2=footer_win_]`).text(addOffset(arr[1],'Win %',1).replace('%',''))
   ////////////////////////////////
   console.log(lookupName,currentPlayerCol,array);
   $(`div[player=${currentPlayerCol}]`).find('.placeholder').removeClass('placeholder') // remove placeholder 
