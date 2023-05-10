@@ -113,10 +113,7 @@ body {
 	opacity: 90%;
 }
 
-.form-control {
-	background-color: rgb(47, 47, 47);
-	color: #a5a5a5;
-}
+.form-control,
 .form-control:focus {
 	background-color: rgb(47, 47, 47);
 	color: #a5a5a5;
@@ -142,9 +139,29 @@ p {
 	display: flex;
 	justify-content: center;
 }
-.carousel-indicators [data-bs-target] {
+.carousel-indicators.m-0 [data-bs-target] {
 	width: 100%;
-	height: 6px;
-	border-top-width: 8px;
-	border-bottom-width: 8px;
+	height: 25px;
+	margin: unset;
+	border-bottom: unset;
+	border-top: unset;
+	text-indent: unset;
+}
+div.carousel-indicators.m-0 {
+	display: flex;
+	align-items: flex-end;
+}
+div.carousel-indicators.m-0 > button {
+	border-left: 1px black solid;
+	border-right: 1px black solid;
+	font-size: 12px;
+}
+.carousel-indicators.m-0 > button:first-of-type {
+	border-left: unset;
+}
+div.carousel-indicators > button:last-of-type {
+	border-right: unset;
+}
+div.carousel-indicators.m-0 > button.active {
+	height: 35px;
 }
