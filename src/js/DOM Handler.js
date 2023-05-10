@@ -2,7 +2,7 @@
 import Rank_Color from './Rank Colors'
 const defaultElements = {
   buttonGroup: () => 
-  `<div class="btn-group w-100 my-md-2">
+  `<div class="btn-group w-100 my-md-2 my-1">
     <button class="btn rounded-2 btn-outline-success w-50" type="button" attr="input-group-button-submit" tabindex="-1">Submit</button>
     <button class="btn w-50 rounded-2 btn-outline-info w-50" type="button" attr="input-group-button-refresh" tabindex="-1" hidden>Refresh</button>
   </div>
