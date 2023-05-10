@@ -36,7 +36,7 @@ const defaultElements = {
             <div class="row mx-3 mt-1 align-items-center border-1 border-bottom pb-2">
               <div class="col-7 vstack">
                 <p card1="body_kd" class="  w-100 mb-1 placeholder fw-bold"></p>
-                <p card1="body_rank" class="w-100 mb-1 placeholder" style="text-shadow: 1px 0px 25px"></p>
+                <p card1="body_rank" class="w-100 mb-1 placeholder" ></p>
                 <p card1="body_mmr" class=" w-100 mb-0 placeholder"></p>
               </div>
               <div class="col-5" style='display:flex;justify-content:space-evenly'>
@@ -88,7 +88,7 @@ const defaultElements = {
         <div class='d-flex flex-row align-items-center w-100'>
         <img card2="max_rank_img" class='placeholder' style="height: 50px; width:50px" />
         <div class='mx-3 vr align-self-center' style='height:38px'></div>
-        <p class='mb-0 p-1 col-7'>Overall Ranked</p>
+        <p class='mb-0 p-1'>Overall Ranked</p>
       </div>
         </button>
       </h2>
@@ -219,12 +219,12 @@ export function main (currentPlayerCol,array,lookupName) {
   let kdColor = () => addOffset(arr[3],'K/D',1) * 1 >= 1 ?'#108623':'#af1717'
 
   $(`${colFilter} [card1=body_kd]`).text('K/D: ' + addOffset(arr[3],'K/D',1)).css('color', kdColor)
-
   $(`${colFilter} [card1=body_rank]`).text(addOffset(arr[3],'Rank',1))
   $(`${colFilter} [card1=body_mmr]`).text(addOffset(arr[3],'Rank Points',1)+' MMR')
   //
   $(`${colFilter} [card1=body_max_rank]`).text(addOffset(arr[3],'Max Rank',1))
   $(`${colFilter} [card1=body_max_mmr]`).text(addOffset(arr[3],'Max Rank Points',1)+' MMR')
+  color = Rank_Color(addOffset(arr[3],'Max Rank',1).match(/\w+/)[0].toLowerCase())
   $(`${colFilter} [card1=record_img]`).attr('src',rankImg(addOffset(arr[3],'Max Rank',1))).css('filter',`drop-shadow(0pt 0pt 12pt ${color})`)
   //footer
   $(`${colFilter} [card1=footer_matches]`).text(arr[3][1].replace(/[A-Za-z ]/g, ''))

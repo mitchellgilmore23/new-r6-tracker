@@ -3,6 +3,7 @@
 	--bs-accordion-bg: rgb(0, 0, 0);
 	--bs-accordion-btn-focus-border-color: unset;
 	--bs-accordion-active-bg: #ad9c27;
+	--bs-accordion-btn-focus-box-shadow: unset;
 }
 .carousel-indicators [data-bs-target] {
 	background-color: #ad9c27;
