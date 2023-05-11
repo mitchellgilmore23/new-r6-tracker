@@ -1,21 +1,6 @@
 
 import Rank_Color from './Rank Colors'
 const defaultElements = {
-  buttonGroup: () => 
-  `<div class="btn-group w-100 my-md-2 my-1">
-    <button class="btn rounded-2 btn-outline-success w-50" type="button" attr="input-group-button-submit" tabindex="-1">Submit</button>
-    <button class="btn w-50 rounded-2 btn-outline-info w-50" type="button" attr="input-group-button-refresh" tabindex="-1" hidden>Refresh</button>
-  </div>
-  <div class="input-group mb-1 mb-md-2">
-    <input type="text" class="form-control" placeholder="Enter name.." attr="input-group-text" tabindex='-1' />
-    <button class="btn btn-outline-secondary active" type="button" attr="input-group-button-xbox" tabindex="-1">
-      <img src='../media/Xbox_Icon.svg' height='35px' style='fill:white;'>
-    </button>
-    <button class="btn btn-outline-secondary" type="button" tabindex="-1" attr="input-group-button-ps">
-      <img src='../media/PlayStation_Icon.svg' height='35px' style='fill:white;'>
-    </button>
-  </div>
-	<ul class="list-group dropdown-menu p-0"></ul>`,
   accordionCard1: (i) => `
 	<inject attr='accordionCard1'>
     <div class="accordion-item">
@@ -336,7 +321,7 @@ export function matches(currentPlayerCol,completeArray) {
   });
 };
 export function initializeDOM(){ // run on page start
-  $(`inject[attr=buttonGroup]`).replaceWith(defaultElements.buttonGroup())
+  $(`inject[attr=buttonGroup]`).replaceWith(localStorage.getItem('button-group'))
   $('[player][desktop]').find('[attr=accordionCard1]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard1(i+1)))
   $('[player][desktop]').find('[attr=accordionCard2]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard2(i+1)))
   $('[player][desktop]').find('[attr=accordionCard3]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard3(i+1)))

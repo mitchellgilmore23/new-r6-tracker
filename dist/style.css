@@ -3,7 +3,6 @@
 	--bs-btn-active-border-color: #ad9c27;
 	--bs-btn-hover-border-color: #ad9c27;
 }
-
 .accordion {
 	--bs-accordion-bg: rgb(0, 0, 0);
 	--bs-accordion-btn-focus-border-color: unset;
@@ -110,7 +109,7 @@
 body {
 	background-color: rgb(8 0 0 / 74%);
 	background-blend-mode: darken;
-	background-image: url('./media/BG.png');
+	/* background-image: url('./media/BG.png'); */
 }
 
 .card {

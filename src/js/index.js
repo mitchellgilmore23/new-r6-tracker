@@ -9,16 +9,15 @@ import Swipe from './Swipe';
 import Welcome_Modal from './Welcome Modal'
 import ErrorToast from './Error Toast';
 import * as Off_Canvas from './Off Canvas'; 
+import BGImg from './base64'
 
 Dom_Handler.initializeDOM();
-
+BGImg()
 
 let autoComplete = new AutoComplete();
 var completeArray = {'axiosData': {},'cheerioData': {}}, columnsOccupied;
 var inMobileView = () => $(window).width() < 768 ? true : false;
 var carousel = new bootstrap.Carousel($('#carousel_mobile'));
-
-
 
 $(window).on('load resize',(i) => { // set inMobileView based on window size and focus first input box
   if(i.type =='load') {
@@ -42,6 +41,8 @@ $(window).on('load resize',(i) => { // set inMobileView based on window size and
     inMobileView;
   };
 });
+
+$(window).on('load', 'body', (e) => {console.log(e)});
 
 Swipe(document, 'swipeLeft'); 
 Swipe(document, 'swipeRight');
