@@ -11,13 +11,13 @@ import Welcome_Modal from './Welcome Modal'
 import ErrorToast from './Error Toast';
 
 Dom_Handler.initializeDOM();
+AutoComplete = new Class.autoComplete(); window.AutoComplete = AutoComplete;
 
 var completeArray = {'axiosData': {},'cheerioData': {}}, AutoComplete, columnsOccupied;
 var inMobileView = () => $(window).width() < 768 ? true : false;
 $(window).on('load resize',(i) => { // set inMobileView based on window size and focus first input box
   if(i.type =='load') {
     Off_Canvas.refresh();
-    AutoComplete = new Class.autoComplete(); window.AutoComplete = AutoComplete;
     columnsOccupied = [0,0,0,0,0];
     $('div[mobile] .accordion-body .card').css('max-height',$(window).outerHeight() - 465);
     $('div[desktop] .accordion-body .card').css('max-height',$(window).outerHeight() - 453);
