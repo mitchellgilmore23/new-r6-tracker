@@ -8,7 +8,7 @@ const defaultElements = {
   </div>
   <div class="input-group mb-md-2">
     <input type="text" class="form-control" placeholder="Enter name.." attr="input-group-text" tabindex='-1' />
-    <button class="btn btn-outline-secondary active" type="button" attr="input-group-button-xbox" tabindex="-1" data-bs-title="Use the backquote key (~) to change platforms on the fly!">
+    <button class="btn btn-outline-secondary active" type="button" attr="input-group-button-xbox" tabindex="-1">
       <img src='../media/Xbox_Icon.svg' height='35px' style='fill:white;'>
     </button>
     <button class="btn btn-outline-secondary" type="button" tabindex="-1" attr="input-group-button-ps">
