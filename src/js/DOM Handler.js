@@ -6,7 +6,7 @@ const defaultElements = {
     <button class="btn rounded-2 btn-outline-success w-50" type="button" attr="input-group-button-submit" tabindex="-1">Submit</button>
     <button class="btn w-50 rounded-2 btn-outline-info w-50" type="button" attr="input-group-button-refresh" tabindex="-1" hidden>Refresh</button>
   </div>
-  <div class="input-group mb-md-2">
+  <div class="input-group mb-1 mb-md-2">
     <input type="text" class="form-control" placeholder="Enter name.." attr="input-group-text" tabindex='-1' />
     <button class="btn btn-outline-secondary active" type="button" attr="input-group-button-xbox" tabindex="-1">
       <img src='../media/Xbox_Icon.svg' height='35px' style='fill:white;'>
@@ -206,25 +206,26 @@ const defaultElements = {
   </inject>`
   }
 };
-export function main (currentPlayerCol,array,lookupName) {
+export function main (currentPlayerCol,array,lookupName,lookupPlatform) {
 	let colFilter = `div[player=${currentPlayerCol}]`;
   let arr = array.main;
   $(`${colFilter} [attr=card-header]`).attr('href', array.main[0][0] ||'http://www.google.com').text(array.main[0][1]);
   /////////////card 1
   $(`${colFilter} [card1=current_season]`).text(array.main[3][0])
 
-  $(`${colFilter} [card1=current_rank_img]`).attr('src', rankImg(addOffset(arr[3],'Rank',1)))
+  let currentRankColor = () => Rank_Color(addOffset(arr[3],'Rank',1).match(/^\w+/)[0].toLowerCase())
+  $(`${colFilter} [card1=current_rank_img]`).attr('src', rankImg(addOffset(arr[3],'Rank',1))).css('filter',`drop-shadow(0pt 0pt 12pt ${currentRankColor()})`)
   //body
   let kdColor = () => addOffset(arr[3],'K/D',1) * 1 >= 1 ?'#108623':'#af1717'
-
-
-  $(`${colFilter} [card1=body_kd]`).text('K/D: ' + addOffset(arr[3],'K/D',1))
+  
+  $(`${colFilter} [card1=body_kd]`).text('K/D: ' + addOffset(arr[3],'K/D',1)).css('color', kdColor())
   $(`${colFilter} [card1=body_rank]`).text(addOffset(arr[3],'Rank',1))
   $(`${colFilter} [card1=body_mmr]`).text(addOffset(arr[3],'Rank Points',1)+' MMR')
   //
   $(`${colFilter} [card1=body_max_rank]`).text(addOffset(arr[3],'Max Rank',1))
   $(`${colFilter} [card1=body_max_mmr]`).text(addOffset(arr[3],'Max Rank Points',1)+' MMR')
-  $(`${colFilter} [card1=record_img]`).attr('src',rankImg(addOffset(arr[3],'Max Rank',1)))
+  let maxRankCOlor = () => Rank_Color(addOffset(arr[3],'Max Rank',1).match(/^\w+/)[0].toLowerCase())
+  $(`${colFilter} [card1=record_img]`).attr('src',rankImg(addOffset(arr[3],'Max Rank',1))).css('filter',`drop-shadow(0pt 0pt 12pt ${maxRankCOlor()})`)
   //footer
   $(`${colFilter} [card1=footer_matches]`).text(arr[3][1].replace(/[A-Za-z ]/g, ''))
   $(`${colFilter} [card1=footer_wins]`).text(addOffset(arr[3],'Wins',1))
@@ -257,7 +258,7 @@ export function main (currentPlayerCol,array,lookupName) {
   $(`${colFilter} [card2=footer_win_]`).text(addOffset(arr[1],'Win %',1).replace('%',''))
   ////////////////////////////////
 
-  console.log(lookupName,currentPlayerCol,array);
+  console.log({name: lookupName, col: currentPlayerCol,platform: lookupPlatform, data: array});
   for (var i=0; i<13; i++)  $(`div[player=${currentPlayerCol}]`).find('.placeholder').removeClass(`col-${i}`)
   $(`div[player=${currentPlayerCol}]`).find('.placeholder').removeClass('placeholder') // remove placeholder 
   $(`[aria-label='Slide ${currentPlayerCol}']`).text(array.main[0][1])
@@ -329,7 +330,7 @@ export function matches(currentPlayerCol,completeArray) {
   completeArray.matchHistory.forEach((v, i) => {
     let date = v[0]; let mmr = v[3]; let mmrChange = v[4];
     let KD = v[5]; let humanTime = v[8]; 
-    let result = () => v[2].includes("!") ? v[2] : v[2].match(/\w \w/)[0]+`'s |`
+    let result = () => v[2].includes("!") ? v[2] : v[2].match(/\d/)[0]+` W's | ` + v[2].match(/\d/g)[1] + ` L's`
     let imgSource = v[6] =='undefined' || undefined ? "https://imgur.com/PvLQN8r.png" : v[6]
     $(`div[player=${currentPlayerCol}] [attr=accordion-card-4]`).append(matchesTemplate(date, mmr, mmrChange, result(), imgSource, KD, humanTime));
   });

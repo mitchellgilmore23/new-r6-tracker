@@ -33,12 +33,12 @@ export function main(lookupName,lookupColumn,lookupPlatform) {
   if(starIcon.attr('src').indexOf('Filled') !== -1){
     starIcon.attr('src','../media/Empty Star.svg');
     add = false;
-    Local_Storage.removeStorage(lookupName,'favorites')
+		Local_Storage.staticStorage().rm('favorites',lookupName);
   }
   else { 
     starIcon.attr('src','../media/Filled Star.svg');
     add = true;
-    Local_Storage.setStorage(lookupName,lookupPlatform,'favorites');
+		Local_Storage.staticStorage().set('favorites',lookupName,lookupPlatform)
   }
   let toastTemplate = templates(add,lookupName,lookupPlatform,randomNum);
   $('[attr=favorite-toast]').append(toastTemplate);
@@ -51,6 +51,6 @@ export function main(lookupName,lookupColumn,lookupPlatform) {
 
 export function handleFavoriteStarOnLoad(currentPlayerCol,lookupName) {
 	let starIcon = $(`div[player=${currentPlayerCol}]`).find('img[width=24px]');
-	let playerisFavorite = localStorage.getItem(lookupName+':favorites') !== null
-	playerisFavorite ? starIcon.attr('src','../media/Filled Star.svg') : starIcon.attr('src','../media/Empty Star.svg');
+	let playerisFav = Local_Storage.staticStorage().check('favorites',lookupName).status;
+	playerisFav ? starIcon.attr('src','../media/Filled Star.svg') : starIcon.attr('src','../media/Empty Star.svg');
 }

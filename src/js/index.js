@@ -10,26 +10,43 @@ import Swipe from './Swipe';
 import Welcome_Modal from './Welcome Modal'
 import ErrorToast from './Error Toast';
 
-Dom_Handler.initializeDOM();
-AutoComplete = new Class.autoComplete(); window.AutoComplete = AutoComplete;
 
+
+Dom_Handler.initializeDOM();
+
+
+AutoComplete = new Class.autoComplete(); window.AutoComplete = AutoComplete;
 var completeArray = {'axiosData': {},'cheerioData': {}}, AutoComplete, columnsOccupied;
 var inMobileView = () => $(window).width() < 768 ? true : false;
+var carousel = new bootstrap.Carousel($('#carousel_mobile'))
+
+
+
 $(window).on('load resize',(i) => { // set inMobileView based on window size and focus first input box
   if(i.type =='load') {
     Off_Canvas.refresh();
     columnsOccupied = [0,0,0,0,0];
     $('div[mobile] .accordion-body .card').css('max-height',$(window).outerHeight() - 465);
     $('div[desktop] .accordion-body .card').css('max-height',$(window).outerHeight() - 453);
-    // localStorage.removeItem('showWelcomeModal')// TO REMOVE. just clear old local storage if already stored
+    localStorage.removeItem('showWelcomeModal')// TO REMOVE. just clear old local storage if already stored
     if (localStorage.getItem('showWelcomeModal2') !== 'false') Welcome_Modal().show()
+    else {
+      let focus = 0
+      Object.entries(Local_Storage.persistentStorage().get().loaded).forEach(key => {
+        let [col,...[data]] = key
+        fetchRankedData(data.name,col,data.platform);
+        if (data.hasFocus) focus = col;
+      });
+      carousel.to(focus-1)
+    };
   };
   if (i.type == 'resize') {
     inMobileView;
   };
 });
 
-Swipe(document, 'swipeLeft'); Swipe(document, 'swipeRight');
+Swipe(document, 'swipeLeft'); 
+Swipe(document, 'swipeRight');
 
 $(document).on('keyup', (event) => { 
   let target = $(event.target)
@@ -113,6 +130,7 @@ $(document).on('click', event => {
     $('[attr="input-group-button-refresh"]').attr('hidden','');
     $(`[aria-label^=Slide]`).text('');//carousel indicators set empty
     columnsOccupied = [0,0,0,0,0];
+    Local_Storage.persistentStorage().clear();
   }
   if (target.filter('button[attr=input-group-button-submit]').length > 0) { ///////////////////////////////////////////////////////////Submit Button
     if (lookupName.val().length < 1) return;
@@ -134,7 +152,8 @@ $(document).on('click', event => {
   if (target.filter('button[attr=offCanvas-trash-button],button[attr=offCanvas-trash-button] > img').length > 0) { /////////////////////Off-Canvas Delete Button
     let lookupName = target.parents('.row').find('[platform]').text();
     let type = target.parents('[attr=offCanvas-recent-players],[attr=offCanvas-favorites]').attr('attr') == 'offCanvas-favorites' ? 'favorites' : 'recents';
-    Local_Storage.removeStorage(lookupName,type);
+    Local_Storage.staticStorage().rm(type,lookupName)
+    Off_Canvas.refresh()
   }
   if (target.filter('ul.dropdown-menu > button, ul.dropdown-menu > button > p, ul.dropdown-menu > button > span').length > 0) { /////// Dropdown Menu
     if (target.filter('button').length > 0) {
@@ -165,20 +184,22 @@ $(document).on('click', event => {
 export function fetchRankedData (lookupName,currentPlayerCol,lookupPlatform) {
   if (!lookupName || !currentPlayerCol || !lookupPlatform) return;
 
-  Dom_Handler.showPlaceholder(currentPlayerCol)   
+  Dom_Handler.showPlaceholder(currentPlayerCol);
+
   Fetch.main(lookupName,lookupPlatform).then(response => {
+
     completeArray.axiosData.main = response.data
     Parser.main(completeArray);
     completeArray.cheerioData.main[0].unshift(response.request.responseURL)
     completeArray.cheerioData.main[0][0] = completeArray.cheerioData.main[0][0].replace('https://tracker-proxy.herokuapp.com/','')
+    Local_Storage.staticStorage().set('recents',completeArray.cheerioData.main[0][1],lookupPlatform);
+    Local_Storage.persistentStorage().set(completeArray.cheerioData.main[0][1],lookupPlatform,currentPlayerCol);
     Off_Canvas.refresh();
-    Local_Storage.setStorage(completeArray.cheerioData.main[0][1],lookupPlatform,'recents');
-    // Local_Storage.setPersistentStorage(completeArray.cheerioData.main[0][1],lookupPlatform,currentPlayerCol)
     Favorite_Toast.handleFavoriteStarOnLoad(currentPlayerCol,completeArray.cheerioData.main[0][1]);
     columnsOccupied[currentPlayerCol-1] = 1;
+
   }).then(() => {
-    Dom_Handler.main(currentPlayerCol,completeArray.cheerioData,lookupName,inMobileView)
-  
+    Dom_Handler.main(currentPlayerCol,completeArray.cheerioData,lookupName,lookupPlatform)
   })
   .catch(error => {
     ErrorToast(error,lookupName,lookupPlatform);
@@ -214,7 +235,6 @@ function platformHandler(playerCol,toggle=false) {
 		return platform;
 };
 function focusNextInput(currentPlayerCol,inMobileView) { // to do
-  const carousel = new bootstrap.Carousel($('#carousel_mobile'))
 	if (!currentPlayerCol) currentPlayerCol = 0;
 	currentPlayerCol = currentPlayerCol * 1
 	if (inMobileView){

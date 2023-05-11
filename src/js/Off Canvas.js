@@ -8,14 +8,17 @@ $('#offCanvas-close-button').on('click',() => offCanvas.hide());
 $('#favorites').on('click',() => offCanvas.show());
 
 export function refresh(){ //change or refresh
-	const arr = Local_Storage.fetchStorage();
+	const {recents,favorites} = Local_Storage.staticStorage().get();
 	$('[attr=offCanvas-favorites],[attr=offCanvas-recents]').html('')
-	arr.forEach((v,i) => {
-		if (v[1] == 'favorites') $('[attr=offCanvas-favorites]').append(defaultLayout(v[0],v[2]));
-		if (v[1] == 'recents')   $('[attr=offCanvas-recents]').append(defaultLayout(v[0],v[2]));
+	recents.forEach(val => {
+		let [player,platform] = val;
+		$('[attr=offCanvas-recents]').append(defaultLayout(player,platform));
 	});
+	favorites.forEach(val => {
+    let [player,platform] = val;
+    $('[attr=offCanvas-favorites]').append(defaultLayout(player,platform));
+  });
 };
-
 function defaultLayout(player,platform) {
 	return `
 		<div class="row g-1 mb-1">
