@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>All-Localstorage | Test</title>
+</head>
+<body>
+  <h3>Store & Value</h3>
+  <input type="text" name="store" placeholder="Store Name">
+  <input type="text" name="data" placeholder="Enter value">
+  <button class="save">Save</button>
+  <br><br>
+  <div class="stored-data"></div>
+  <br><hr>
+
+  <h3>Array Store</h3>
+  <input type="text" name="new-data" placeholder="Enter value">
+  <button class="add">Add</button>
+  <button class="remove">Remove</button>
+  <button class="clear">Clear</button>
+  <br><br>
+  <div class="array-stored"></div>
+  <br>
+  <hr>
+
+  <h3>More</h3>
+  <p>Object Store, Flash Storage, Encryption, ...</p>
+  <a href="https://github.com/fabrice8/all-localstorage">Check Documentation</a>
+  <br>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="all-localstorage.min.js"></script>
+  <script>
+   $(document).ready( async () => {
+     
+    let store = new Storage({
+      prefix: 'my_',
+      //storage: 'in-memory',
+      encrypt: true
+    })
+
+    /*-------------------------------------------------------*/
+    // on click Save button
+    $('.save').click( function(){
+      let 
+      storename = $('input[name="store"]').val(),
+      data = $('input[name="data"]').val()
+
+      if( !storename ) alert('Store Name is undefined')
+      if( !data ) alert('No data value')
+
+      // Store a new data
+      store.set( storename, data )
+
+      // Retreive and display stored data
+      let stored = store.get( storename )
+      $('.stored-data').html('<b>'+ storename +'</b>: '+ stored )
+    } )
+
+    
+    /*-------------------------------------------------------*/
+    function showArrayStore(){
+      // Retreive and display stored data
+      let stored = store.get('array-store')
+      $('.array-stored').html('<b>Store</b>: '+ Array.isArray( stored ) && stored.length ? stored.join(', ') : 'Empty' )
+    }
+
+    // Display stored data if exist
+    showArrayStore()
+
+    // on click Add in array store button
+    $('.add').click( function(){
+      let data = $('input[name="new-data"]').val()
+      if( !data ) 
+        alert('No data value to add')
+
+      // Create array store
+      if( !store.get('array-store') )
+        store.set( 'array-store', [] )
+
+      // Store a new data
+      store.update( 'array-store', data, 'push' )
+
+      // Display stored data
+      showArrayStore()
+    } )
+
+    // on click Remove item in array store button
+    $('.remove').click( function(){
+      let data = $('input[name="new-data"]').val()
+      if( !data ) 
+        alert('No data value to remove')
+
+      // Delete item from the array store
+      store.update('array-store', data, 'remove')
+
+      // Display stored data
+      showArrayStore()
+    } )
+
+    // on click Clear array store button
+    $('.clear').click( function(){
+      // Store a new data
+      store.clear('array-store')
+
+      // Display stored data
+      showArrayStore()
+    } )
+   })
+   </script>
+</body>
+</html>

@@ -22,3 +22,6 @@ export function fetchStorage() {
 	});
 	return sortedLocalStorage;
 };
+
+
+//////////////////////////////////////////// TESTING
