@@ -10,11 +10,12 @@ import Swipe from './Swipe';
 import Welcome_Modal from './Welcome Modal'
 import ErrorToast from './Error Toast';
 
-Dom_Handler.initializeDOM();
 var completeArray = {'axiosData': {},'cheerioData': {}}, AutoComplete, columnsOccupied;
 var inMobileView = () => $(window).width() < 768 ? true : false;
 $(window).on('load resize',(i) => { // set inMobileView based on window size and focus first input box
   if(i.type =='load') {
+    Dom_Handler.initializeDOM();
+
     if (!inMobileView) focusNextInput(null,inMobileView)
     localStorage.removeItem('showWelcomeModal')// TO REMOVE. just clear old local storage if already stored
     if (localStorage.getItem('showWelcomeModal2') !== 'false') Welcome_Modal().show()
