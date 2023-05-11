@@ -258,7 +258,7 @@ export function main (currentPlayerCol,array,lookupName,lookupPlatform) {
   $(`${colFilter} [card2=footer_win_]`).text(addOffset(arr[1],'Win %',1).replace('%',''))
   ////////////////////////////////
 
-  console.log({name: lookupName, col: currentPlayerCol,platform: lookupPlatform, data: array});
+  console.log({name: lookupName, col: currentPlayerCol,platform: lookupPlatform, data: {array}});
   for (var i=0; i<13; i++)  $(`div[player=${currentPlayerCol}]`).find('.placeholder').removeClass(`col-${i}`)
   $(`div[player=${currentPlayerCol}]`).find('.placeholder').removeClass('placeholder') // remove placeholder 
   $(`[aria-label='Slide ${currentPlayerCol}']`).text(array.main[0][1])

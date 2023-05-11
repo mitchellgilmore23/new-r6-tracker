@@ -26,6 +26,11 @@ export default class {
 	clearResults = () => $(`[attr='autocomplete-dropdown-items-to-delete']`).remove()
 }
 function cancelledAutoComplete(e) {
-	console.warn(['AutoComplete Cancelled', {code:e.code},{message: e.message},{url: e.config.url}])
+	console.info({
+							autoComplete:'Cancelled.',
+							code : e.code,
+							message: e.message
+							,url: e.config.url
+						})
 	$(`[attr='autocomplete-dropdown-items-to-delete']`).remove()
 }
