@@ -212,9 +212,8 @@ export function main (currentPlayerCol,array,lookupName) {
   $(`${colFilter} [attr=card-header]`).attr('href', array.main[0][0] ||'http://www.google.com').text(array.main[0][1]);
   /////////////card 1
   $(`${colFilter} [card1=current_season]`).text(array.main[3][0])
-  let color = Rank_Color(addOffset(arr[3],'Rank',1).match(/\w+/)[0].toLowerCase())
 
-  $(`${colFilter} [card1=current_rank_img]`).attr('src', rankImg(addOffset(arr[3],'Rank',1))).css('filter',`drop-shadow(0pt 0pt 12pt ${color})`)
+  $(`${colFilter} [card1=current_rank_img]`).attr('src', rankImg(addOffset(arr[3],'Rank',1)))
   //body
   let kdColor = () => addOffset(arr[3],'K/D',1) * 1 >= 1 ?'#108623':'#af1717'
 
@@ -224,8 +223,7 @@ export function main (currentPlayerCol,array,lookupName) {
   //
   $(`${colFilter} [card1=body_max_rank]`).text(addOffset(arr[3],'Max Rank',1))
   $(`${colFilter} [card1=body_max_mmr]`).text(addOffset(arr[3],'Max Rank Points',1)+' MMR')
-  color = Rank_Color(addOffset(arr[3],'Max Rank',1).match(/\w+/)[0].toLowerCase())
-  $(`${colFilter} [card1=record_img]`).attr('src',rankImg(addOffset(arr[3],'Max Rank',1))).css('filter',`drop-shadow(0pt 0pt 12pt ${color})`)
+  $(`${colFilter} [card1=record_img]`).attr('src',rankImg(addOffset(arr[3],'Max Rank',1)))
   //footer
   $(`${colFilter} [card1=footer_matches]`).text(arr[3][1].replace(/[A-Za-z ]/g, ''))
   $(`${colFilter} [card1=footer_wins]`).text(addOffset(arr[3],'Wins',1))
