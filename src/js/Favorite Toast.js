@@ -1,6 +1,6 @@
 import * as Off_Canvas from './Off Canvas';
 import * as Local_Storage from './Local Storage';
-export function templates(add,lookupName,lookupPlatform,randomNum) {
+function templates(add,lookupName,lookupPlatform,randomNum) {
 	if (add){
 		return `
 		<div attr="${randomNum}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true">
@@ -26,7 +26,7 @@ export function templates(add,lookupName,lookupPlatform,randomNum) {
 	};
 };
 
-export function main(lookupName,lookupColumn,lookupPlatform) {
+export function favoriteStarClick(lookupName,lookupColumn,lookupPlatform) {
 	let randomNum = Math.round(Math.random() * 1000)
   let add = true;
   let starIcon = lookupColumn.find('img[width=24px]');

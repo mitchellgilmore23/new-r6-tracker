@@ -1,5 +1,3 @@
-const bootstrap = require('bootstrap');
-const $ = require('jquery');
 const errorToast = new bootstrap.Toast($('#error-toast'),{
 	animation: true,
 	autohide: true,
@@ -7,10 +5,8 @@ const errorToast = new bootstrap.Toast($('#error-toast'),{
 });
 const toastBody = $('#error-toast-body');
 const toastHeader = $('#error-toast-header');
-
-
-
-export default function(error,lookupName,lookupPlatform) {
+export default function(error,lookupName,lookupPlatform,currentPlayerCol) {
+	$(`[aria-label='Slide ${currentPlayerCol}']`).text('')
 	if(error.message.indexOf('404') !== -1){
 		let newUrl = error.config.url.replace('https://tracker-proxy.herokuapp.com/','')
 		toastHeader.text(lookupName + ' on ' + lookupPlatform + ' returned an error. ');

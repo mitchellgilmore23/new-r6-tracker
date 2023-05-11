@@ -1,11 +1,9 @@
-const $ = require('jquery');
-const bootstrap = require('bootstrap');
-
 export const offCanvas = new bootstrap.Offcanvas($('#offCanvas'),{scroll: true});
 import * as Local_Storage from './Local Storage';
 
 $('#offCanvas-close-button').on('click',() => offCanvas.hide());
 $('#favorites').on('click',() => offCanvas.show());
+
 
 export function refresh(){ //change or refresh
 	const {recents,favorites} = Local_Storage.staticStorage().get();

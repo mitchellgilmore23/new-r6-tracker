@@ -1,5 +1,6 @@
 import * as Off_Canvas from './Off Canvas.js';
 
+const persistentStorageTimeout = 3600 // timeout after 3600 seconds(1 hr)
 export function staticStorage() {
 	function check(type,name){
 		let localStorageArr = localStorage.getObj(type) ? localStorage.getObj(type) : [];
@@ -62,7 +63,7 @@ export function persistentStorage() {
 		Object.keys(loaded).forEach((arr,i) => loaded[arr].hasFocus = false);
 		loaded[col] = {name: name,
 									platform: platform,
-									expiryTime:(Date.now()/1000) + 3600,
+									expiryTime:(Date.now()/1000) + persistentStorageTimeout,
 									hasFocus: true,
 								}
 

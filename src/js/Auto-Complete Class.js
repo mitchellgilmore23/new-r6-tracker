@@ -1,6 +1,6 @@
 const axios = require('axios');
 const proxy = 'https://tracker-proxy.herokuapp.com'
-export class autoComplete {
+export default class {
 	constructor(lookupName, currentPlayerCol, lookupPlatform) {
     this.lookupName = lookupName;
 		this.currentPlayerCol = currentPlayerCol;
