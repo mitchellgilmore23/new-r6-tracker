@@ -1,14 +1,9 @@
 export default function () {
   let alreadyStored = localStorage.getItem('background-image');
-	if (alreadyStored === null) {
-		localStorage.setItem('background-image',bgImgInBase64)
-		$('body').css('background-image', `url('data:image/png;base64,`+bgImgInBase64+`')`)
-	}
-	else {
-    $('body').css('background-image', `url('data:image/png;base64,`+alreadyStored+`')`)
-  }
+	if (alreadyStored === null)	localStorage.setItem('background-image',bgImgInBase64)
 	alreadyStored = localStorage.getItem('button-group')
 	if (alreadyStored === null) localStorage.setItem('button-group',buttonGroup)
+	$('body').css('background-image', `url('data:image/png;base64,`+bgImgInBase64+`')`)
 }
 
 const buttonGroup = `<div class="btn-group w-100 my-md-2 my-1">
