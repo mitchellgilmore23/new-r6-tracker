@@ -7,7 +7,7 @@ export default function () {
 	else {
     $('body').css('background-image', `url('data:image/png;base64,`+alreadyStored+`')`)
   }
-	alreadyStored = localStorage.getItem('button-group');
+	alreadyStored = localStorage.getItem('button-group')
 	if (alreadyStored === null) localStorage.setItem('button-group',buttonGroup)
 }
 

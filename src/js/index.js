@@ -11,8 +11,8 @@ import ErrorToast from './Error Toast';
 import * as Off_Canvas from './Off Canvas'; 
 import BGImg from './base64'
 
-Dom_Handler.initializeDOM();
 BGImg()
+Dom_Handler.initializeDOM();
 
 let autoComplete = new AutoComplete();
 var completeArray = {'axiosData': {},'cheerioData': {}}, columnsOccupied;
