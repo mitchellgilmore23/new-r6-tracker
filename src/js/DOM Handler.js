@@ -215,9 +215,9 @@ export function main (currentPlayerCol,array,lookupName) {
 
   $(`${colFilter} [card1=current_rank_img]`).attr('src', rankImg(addOffset(arr[3],'Rank',1)))
   //body
-  let kdColor = () => addOffset(arr[3],'K/D',1) * 1 >= 1 ?'#108623':'#af1717'
+ 
 
-  $(`${colFilter} [card1=body_kd]`).text('K/D: ' + addOffset(arr[3],'K/D',1)).css('color', kdColor)
+  $(`${colFilter} [card1=body_kd]`).text('K/D: ' + addOffset(arr[3],'K/D',1))
   $(`${colFilter} [card1=body_rank]`).text(addOffset(arr[3],'Rank',1))
   $(`${colFilter} [card1=body_mmr]`).text(addOffset(arr[3],'Rank Points',1)+' MMR')
   //
@@ -328,7 +328,7 @@ export function matches(currentPlayerCol,completeArray) {
   completeArray.matchHistory.forEach((v, i) => {
     let date = v[0]; let mmr = v[3]; let mmrChange = v[4];
     let KD = v[5]; let humanTime = v[8]; 
-    let result = () => v[2].includes("!") ? v[2] : v[2].match(/\w \w/)[0]+`'s |`+ v[2].match(/(?<=,) \w \w/)[0] + `'s`;
+    let result = () => v[2].includes("!") ? v[2] : v[2].match(/\w \w/)[0]+`'s |`// v[2].match(/(?<=,) \w \w/)[0] + `'s`;
     let imgSource = v[6] =='undefined' || undefined ? "https://imgur.com/PvLQN8r.png" : v[6]
     $(`div[player=${currentPlayerCol}] [attr=accordion-card-4]`).append(matchesTemplate(date, mmr, mmrChange, result(), imgSource, KD, humanTime));
   });
