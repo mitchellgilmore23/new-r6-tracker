@@ -344,7 +344,7 @@ export function showPlaceholder(currentPlayerCol) {
   $(`[player=${currentPlayerCol}][mobile]`).find(`[attr=accordionCard2]`).replaceWith(defaultElements.accordionCard2(currentPlayerCol + 5))
   $(`[player=${currentPlayerCol}][mobile]`).find(`[attr=accordionCard3]`).replaceWith(defaultElements.accordionCard3(currentPlayerCol + 5))
   $(`[player=${currentPlayerCol}][mobile]`).find(`[attr=accordionCard4]`).replaceWith(defaultElements.accordionCard4(currentPlayerCol + 5))
-  $('.accordion-body .card').css('max-height',$(window).outerHeight() - 474);
+  $('.accordion-body .card').css('max-height',$(window).outerHeight() - 454);
   $(`div[player=${currentPlayerCol}]`).find('[attr=input-group-button-refresh]').css('display','unset') // show refresh button
   $(`[player=${currentPlayerCol}]`).find('.card').css('visibility','unset');// finally, show the card
 };

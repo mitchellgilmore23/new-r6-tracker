@@ -10,12 +10,11 @@ var completeArray = {'axiosData': {},'cheerioData': {}}, columnsOccupied = [0,0,
 let autoComplete = new AutoComplete(), carousel = new bootstrap.Carousel($('#carousel_mobile'));
 
 $(window).on('load resize',(i) => { 
-  if (i.type == 'resize') {
-  };
+  $('div .accordion-body .card').css('max-height',$(window).outerHeight() - 454);
+  
   if(i.type =='load') {
     Off_Canvas.refresh();
-    $('div[mobile] .accordion-body .card').css('max-height',$(window).outerHeight() - 465);
-    $('div[desktop] .accordion-body .card').css('max-height',$(window).outerHeight() - 453);
+
     localStorage.removeItem('showWelcomeModal')// TO REMOVE. just clear old local storage if already stored
     Swipe(document, 'swipeLeft'); 
     Swipe(document, 'swipeRight');
