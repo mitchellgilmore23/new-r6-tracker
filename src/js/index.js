@@ -13,13 +13,19 @@ $(window).on('load resize',(i) => {
   if (i.type == 'resize') {
   };
   if(i.type =='load') {
-    if (inMobileView() && staticStorage('swipe-instruction-dismiss-count').get() < 3 ) $('swipeinstruction').append(Dom_Handler.swipeInstruction());
     Off_Canvas.refresh();
     $('div[mobile] .accordion-body .card').css('max-height',$(window).outerHeight() - 465);
     $('div[desktop] .accordion-body .card').css('max-height',$(window).outerHeight() - 453);
     localStorage.removeItem('showWelcomeModal')// TO REMOVE. just clear old local storage if already stored
     Swipe(document, 'swipeLeft'); 
     Swipe(document, 'swipeRight');
+
+    if (inMobileView() && staticStorage('swipe-instruction-dismiss-count').get() < 3 ){ // show swipe instruction if less than 3
+      $('swipeinstruction').append(Dom_Handler.swipeInstruction());
+      i.stopPropagation();
+      return;
+    }
+
     if (localStorage.getItem('showWelcomeModal2') !== 'false') Welcome_Modal().show()
     else {
       let focus = 0
