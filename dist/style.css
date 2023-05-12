@@ -109,13 +109,14 @@
 body {
 	background-color: rgb(8 0 0 / 74%);
 	background-blend-mode: darken;
-	/* background-image: url('./media/BG.png'); */
+	height: 100vh;
 }
 
 .card {
 	background-color: rgb(47, 47, 47);
 	color: #a5a5a5;
 	opacity: 90%;
+	visibility: hidden;
 }
 
 .form-control,
@@ -172,4 +173,107 @@ div.carousel-indicators > button:last-of-type {
 }
 div.carousel-indicators.m-0 > button.active {
 	height: 35px;
+}
+.swipe {
+	position: fixed;
+	display: flex;
+	width: 100%;
+	height: 100%;
+	align-items: center;
+}
+
+.hand-icon {
+	position: absolute;
+	background-image: url('https://i.postimg.cc/8556gm60/hand.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 100px;
+	height: 100px;
+	left: calc(50vw - 50px);
+	top: 25vh;
+	transform-origin: 52% 62%;
+	visibility: hidden;
+	animation: swipe-hand 2s infinite;
+}
+
+@keyframes swipe-hand {
+	0% {
+		visibility: unset;
+	}
+	25% {
+		transform: translate(30vw) rotate(30deg);
+	}
+	50% {
+		transform: translate(-30vw) rotate(-15deg);
+	}
+	100% {
+		transform: translate(0px) rotate(0);
+		visibility: hidden;
+	}
+}
+.path {
+	width: 30px;
+	height: 25px;
+	position: absolute;
+	background: #ad9c27;
+	border-radius: 40px;
+	top: 26vh;
+	left: calc(80vw);
+	visibility: hidden;
+	animation: swipe-dot 2s 0.5s infinite;
+}
+@keyframes swipe-dot {
+	12% {
+		visibility: visible;
+		width: 10vw;
+	}
+	25% {
+		width: 30px;
+		visibility: visible;
+		transform: translate(-68vw);
+	}
+	26% {
+		visibility: hidden;
+	}
+}
+
+.arrow {
+	position: absolute;
+	top: 90%;
+	left: 10vw;
+	transform: translate(-50%, -50%);
+	cursor: pointer;
+}
+
+.arrow span {
+	display: block;
+	width: 2.5vw;
+	height: 2.5vw;
+	border-bottom: 5px solid white;
+	border-right: 5px solid white;
+	transform: rotate(45deg);
+	margin: -10px;
+	animation: animate 2s infinite;
+}
+
+.arrow span:nth-child(2) {
+	animation-delay: -0.2s;
+}
+
+.arrow span:nth-child(3) {
+	animation-delay: -0.4s;
+}
+
+@keyframes animate {
+	0% {
+		opacity: 0;
+		transform: rotate(45deg) translate(-20px, -20px);
+	}
+	50% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		transform: rotate(45deg) translate(20px, 20px);
+	}
 }

@@ -1,13 +1,10 @@
-export const offCanvas = new bootstrap.Offcanvas($('#offCanvas'),{scroll: true});
-import * as Local_Storage from './Local Storage';
-
+import { staticStorage } from './Local Storage';
 $('#offCanvas-close-button').on('click',() => offCanvas.hide());
 $('#favorites').on('click',() => offCanvas.show());
-
-
+export const offCanvas = new bootstrap.Offcanvas($('#offCanvas'),{scroll: true});
 export function refresh(){ //change or refresh
-	const {recents,favorites} = Local_Storage.staticStorage().get();
-	$('[attr=offCanvas-favorites],[attr=offCanvas-recents]').html('')
+	const {recents,favorites} = staticStorage().get();
+	$('[attr=offCanvas-favorites],[attr=offCanvas-recents]').html('');
 	recents.forEach(val => {
 		let [player,platform] = val;
 		$('[attr=offCanvas-recents]').append(defaultLayout(player,platform));
@@ -27,5 +24,4 @@ function defaultLayout(player,platform) {
 				<button class="btn btn-outline-danger w-100" attr='offCanvas-trash-button'><img src="../media/Trash.svg" /></button>
 			</div>
 		</div>`
-}
-
+};

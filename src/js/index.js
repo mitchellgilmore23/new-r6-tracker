@@ -1,35 +1,29 @@
 require('./Local Storage'); 
-import AutoComplete  from "./Auto-Complete Class"; 
-import * as Dom_Handler from "./DOM Handler";
-import Fetch from "./Fetch"; 
-import Parser from "./Parser"; 
-import { staticStorage,persistentStorage } from './Local Storage';
+import AutoComplete  from "./Auto-Complete Class";import Fetch from "./Fetch"; 
+import Parser from "./Parser"; import { staticStorage,persistentStorage } from './Local Storage';
 import {favoriteStarClick,handleFavoriteStarOnLoad} from './Favorite Toast';
-import Swipe from './Swipe'; 
-import Welcome_Modal from './Welcome Modal'
-import ErrorToast from './Error Toast';
-import * as Off_Canvas from './Off Canvas'; 
-import BGImg from './base64'
+import Swipe from './Swipe'; import Welcome_Modal from './Welcome Modal'
+import ErrorToast from './Error Toast'; import * as Off_Canvas from './Off Canvas'; 
+import * as Dom_Handler from "./DOM Handler";
 
-BGImg()
-Dom_Handler.initializeDOM();
+var completeArray = {'axiosData': {},'cheerioData': {}}, columnsOccupied = [0,0,0,0,0], inMobileView = () => $(window).width() < 768 ? true : false;
+let autoComplete = new AutoComplete(), carousel = new bootstrap.Carousel($('#carousel_mobile'));
 
-let autoComplete = new AutoComplete();
-var completeArray = {'axiosData': {},'cheerioData': {}}, columnsOccupied;
-var inMobileView = () => $(window).width() < 768 ? true : false;
-var carousel = new bootstrap.Carousel($('#carousel_mobile'));
-
-$(window).on('load resize',(i) => { // set inMobileView based on window size and focus first input box
+$(window).on('load resize',(i) => { 
+  if (i.type == 'resize') {
+  };
   if(i.type =='load') {
+    if (inMobileView() && staticStorage('swipe-instruction-dismiss-count').get() < 3 ) $('swipeinstruction').append(Dom_Handler.swipeInstruction());
     Off_Canvas.refresh();
-    columnsOccupied = [0,0,0,0,0];
     $('div[mobile] .accordion-body .card').css('max-height',$(window).outerHeight() - 465);
     $('div[desktop] .accordion-body .card').css('max-height',$(window).outerHeight() - 453);
     localStorage.removeItem('showWelcomeModal')// TO REMOVE. just clear old local storage if already stored
+    Swipe(document, 'swipeLeft'); 
+    Swipe(document, 'swipeRight');
     if (localStorage.getItem('showWelcomeModal2') !== 'false') Welcome_Modal().show()
     else {
       let focus = 0
-      Object.entries(persistentStorage().get().loaded).forEach(key => {
+      Object.entries(persistentStorage('loaded').get().loaded).forEach(key => {
         let [col,...[data]] = key
         fetchRankedData(data.name,col,data.platform);
         if (data.hasFocus) focus = col;
@@ -37,15 +31,7 @@ $(window).on('load resize',(i) => { // set inMobileView based on window size and
       carousel.to(focus-1)
     };
   };
-  if (i.type == 'resize') {
-    inMobileView;
-  };
 });
-
-$(window).on('load', 'body', (e) => {console.log(e)});
-
-Swipe(document, 'swipeLeft'); 
-Swipe(document, 'swipeRight');
 
 $(document).on('keyup', (event) => { 
   let target = $(event.target)
@@ -113,45 +99,44 @@ $(document).on('keydown', (event) => {
 
 $(document).on('click', event => {
 
-  let target = $(event.target)
-  let lookupName = target.parents('[player]').find('[attr=input-group-text]');
-  let lookupColumn = target.parents('[player]')
-  let lookupPlatform = platformHandler(lookupColumn.attr('player'));
+  let target = $(event.target), lookupName = target.parents('[player]').find('[attr=input-group-text]');
+  let lookupColumn = target.parents('[player]'), lookupPlatform = platformHandler(lookupColumn.attr('player'));
 
-  if (target.filter('div.input-group > [attr*=input-group-button],div.input-group > [attr*=input-group-button] > img').length > 0) { //Platform Button
+  if (target.filter('div.input-group > [attr*=input-group-button],div.input-group > [attr*=input-group-button] > img').length > 0) { // Platform Button
     autoComplete.controller.abort(); // stop auto-complete
     platformHandler(lookupColumn.attr('player'),true); // toggle Physical platform button and return new platform
     if (lookupName.val().length < 1) return;
     autoComplete = new Class.autoComplete(lookupName.val(),lookupColumn.attr('player'),lookupPlatform);
   }
-  if (target.filter('#clearForm').length > 0){ ////////////////////////////////////////////////////////////////////////////////////////Clear All Button
-    $(`.card`).attr('hidden',true);
-    $('[attr="input-group-button-refresh"]').attr('hidden','');
+  if (target.filter('#clearForm, #clearForm > img').length > 0){ /////////////////////////////////////////////////////////////////////  Clear All Button
+    $(`.card`).css('visibility','hidden');
+    $('[attr="input-group-button-refresh"]').css('display','none');
     $(`[aria-label^=Slide]`).text('');//carousel indicators set empty
     columnsOccupied = [0,0,0,0,0];
-    persistentStorage().clear();
+    persistentStorage('loaded').clear();
   }
-  if (target.filter('button[attr=input-group-button-submit]').length > 0) { ///////////////////////////////////////////////////////////Submit Button
+  if (target.filter('button[attr=input-group-button-submit]').length > 0) { /////////////////////////////////////////////////////////// Submit Button
     if (lookupName.val().length < 1) return;
     fetchRankedData(lookupName.val(),lookupColumn.attr('player') * 1,lookupPlatform);
   }
-  if (target.filter('button[attr=input-group-button-refresh]').length > 0) { //////////////////////////////////////////////////////////Refresh Button
+  if (target.filter('button[attr=input-group-button-refresh]').length > 0) { ////////////////////////////////////////////////////////// Refresh Button
     fetchRankedData(lookupColumn.find('[attr=card-header]').text(),lookupColumn.attr('player') * 1,lookupPlatform)
   }
-  if (target.filter('button[attr=favorite-star-on-card],button[attr=favorite-star-on-card] > img').length > 0) { /////////////////////Save favorite Button
-    favoriteStarClick(lookupColumn.find('[attr=card-header]').text(),lookupColumn,lookupPlatform)
+  if (target.filter('button[attr=favorite-star-on-card],button[attr=favorite-star-on-card] > img').length > 0) { ////////////////////// Save favorite Button
+    favoriteStarClick(lookupColumn.find('[attr=card-header]').text(),lookupColumn,lookupPlatform);
+    Off_Canvas.refresh();
   }
-  if (target.filter('button[attr=offCanvas-player-button]').length > 0) { //////////////////////////////////////////////////////////////Off-Canvas Player Button
+  if (target.filter('button[attr=offCanvas-player-button]').length > 0) { ///////////////////////////////////////////////////////////// Off-Canvas Player Button
     lookupName = target.text();
     lookupPlatform = target.attr('platform');
     if (!inMobileView) fetchRankedData(lookupName,findFirstAvailableColumn(),lookupPlatform);
     else fetchRankedData(lookupName,Swipe(),lookupPlatform);
     Off_Canvas.offCanvas.hide();
   }
-  if (target.filter('button[attr=offCanvas-trash-button],button[attr=offCanvas-trash-button] > img').length > 0) { /////////////////////Off-Canvas Delete Button
+  if (target.filter('button[attr=offCanvas-trash-button],button[attr=offCanvas-trash-button] > img').length > 0) { //////////////////// Off-Canvas Delete Button
     let lookupName = target.parents('.row').find('[platform]').text();
     let type = target.parents('[attr=offCanvas-recent-players],[attr=offCanvas-favorites]').attr('attr') == 'offCanvas-favorites' ? 'favorites' : 'recents';
-    staticStorage().rm(type,lookupName)
+    staticStorage(type).rm(lookupName)
     Off_Canvas.refresh()
   }
   if (target.filter('ul.dropdown-menu > button, ul.dropdown-menu > button > p, ul.dropdown-menu > button > span').length > 0) { /////// Dropdown Menu
@@ -175,33 +160,40 @@ $(document).on('click', event => {
   if (target.filter('[welcomemodal=dontShowAgain]').length > 0){ ////////////////////////////////////////////////////////////////////// Welcome Modal Dont show again Button
     localStorage.setItem('showWelcomeModal2','false')
   }
-  else {  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////ELSE clean up.. 
+  if (target.parents('swipeinstruction').length > 0){
+    $('swipeinstruction').remove();
+    let {currentCount} = staticStorage('swipe-instruction-dismiss-count').get() == null ? 0 : staticStorage('swipe-instruction-dismiss-count').get()
+    staticStorage('swipe-instruction-dismiss-count').set(staticStorage('swipe-instruction-dismiss-count').get() *1 + 1)
+    console.log(currentCount)
+  }
+  else {  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ELSE clean up.. 
     autoComplete.controller.abort();
     $(`[attr=autocomplete-dropdown-items-to-delete]`).length >0 ? $(`[attr=autocomplete-dropdown-items-to-delete]`).remove() : null;
   } 
+
+
 });
+
 export function fetchRankedData (lookupName,currentPlayerCol,lookupPlatform) {
   if (!lookupName || !currentPlayerCol || !lookupPlatform) return;
   Dom_Handler.showPlaceholder(currentPlayerCol);
-  Fetch().main(lookupName,lookupPlatform).then(response => {
-    
+  
+  Fetch().main(lookupName,lookupPlatform).then(response => {    
     completeArray.axiosData.main = response.data
     Parser().main(completeArray,response);
-
-    staticStorage().set('recents',completeArray.cheerioData.main[0][1],lookupPlatform);
-    persistentStorage().set(completeArray.cheerioData.main[0][1],lookupPlatform,currentPlayerCol);
-    Off_Canvas.refresh();
-    handleFavoriteStarOnLoad(currentPlayerCol,completeArray.cheerioData.main[0][1]);
     columnsOccupied[currentPlayerCol-1] = 1;
-
+    persistentStorage('loaded').set(completeArray.cheerioData.main[0][1],lookupPlatform,currentPlayerCol);
+    staticStorage('recents').set(completeArray.cheerioData.main[0][1],lookupPlatform);
+    
   }).then(() => {
-    Dom_Handler.main(currentPlayerCol,completeArray.cheerioData,lookupName,lookupPlatform)
-  })
-  .catch(error => {
+    handleFavoriteStarOnLoad(currentPlayerCol,completeArray.cheerioData.main[0][1]);
+    Dom_Handler.main(currentPlayerCol,completeArray.cheerioData,lookupName,lookupPlatform);
+  
+  }).catch(error => {
     ErrorToast(error,lookupName,lookupPlatform,currentPlayerCol);
     columnsOccupied[currentPlayerCol -1] = 0;
-    $(`div[player=${currentPlayerCol}] [attr=input-group-button-refresh]`).attr('hidden',''); // hide the refresh button
-    $(`[player=${currentPlayerCol}]`).find('.card').attr('hidden',''); // hide the card with no results
+    $(`div[player=${currentPlayerCol}] [attr=input-group-button-refresh]`).css('display','none') // hide the refresh button
+    $(`[player=${currentPlayerCol}]`).find('.card').css('visibility','hidden');// hide player card
 
   });
 
@@ -230,7 +222,7 @@ function platformHandler(playerCol,toggle=false) {
 	else if (toggle == false) xbox.hasClass('active') && !ps.hasClass('active') ? platform = "xbox" : platform = "psn";
 		return platform;
 };
-function focusNextInput(currentPlayerCol,inMobileView) { // to do
+function focusNextInput(currentPlayerCol,inMobileView) {
 	if (!currentPlayerCol) currentPlayerCol = 0;
 	currentPlayerCol = currentPlayerCol * 1
 	if (inMobileView){

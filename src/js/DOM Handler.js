@@ -1,5 +1,6 @@
 
 import Rank_Color from './Rank Colors'
+import { staticStorage } from './Local Storage';
 const defaultElements = {
   accordionCard1: (i) => `
 	<inject attr='accordionCard1'>
@@ -320,7 +321,7 @@ export function matches(currentPlayerCol,completeArray) {
     $(`div[player=${currentPlayerCol}] [attr=accordion-card-4]`).append(matchesTemplate(date, mmr, mmrChange, result(), imgSource, KD, humanTime));
   });
 };
-export function initializeDOM(){ // run on page start
+(function initializeDOM(){ // run on page start
   $(`inject[attr=buttonGroup]`).replaceWith(localStorage.getItem('button-group'))
   $('[player][desktop]').find('[attr=accordionCard1]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard1(i+1)))
   $('[player][desktop]').find('[attr=accordionCard2]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard2(i+1)))
@@ -330,7 +331,7 @@ export function initializeDOM(){ // run on page start
   $('[player][mobile]' ).find('[attr=accordionCard2]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard2(i+6)))
   $('[player][mobile]' ).find('[attr=accordionCard3]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard3(i+6)))
   $('[player][mobile]' ).find('[attr=accordionCard4]').each((i,el)=> $(el).replaceWith(defaultElements.accordionCard4(i+6)))
-};
+})();
 export function showPlaceholder(currentPlayerCol) {
   currentPlayerCol = currentPlayerCol * 1
   $(`div[player=${currentPlayerCol}] [attr=card-header]`).text('').addClass('placeholder') // add placeholder
@@ -344,6 +345,23 @@ export function showPlaceholder(currentPlayerCol) {
   $(`[player=${currentPlayerCol}][mobile]`).find(`[attr=accordionCard3]`).replaceWith(defaultElements.accordionCard3(currentPlayerCol + 5))
   $(`[player=${currentPlayerCol}][mobile]`).find(`[attr=accordionCard4]`).replaceWith(defaultElements.accordionCard4(currentPlayerCol + 5))
   $('.accordion-body .card').css('max-height',$(window).outerHeight() - 474);
-  $(`div[player=${currentPlayerCol}]`).find('[attr=input-group-button-refresh]').removeAttr('hidden') // show refresh button
-  $(`[player=${currentPlayerCol}]`).find('.card').removeAttr('hidden');// finally, show the card
+  $(`div[player=${currentPlayerCol}]`).find('[attr=input-group-button-refresh]').css('display','unset') // show refresh button
+  $(`[player=${currentPlayerCol}]`).find('.card').css('visibility','unset');// finally, show the card
 };
+
+let dismissIn =  staticStorage('swipe-instruction-dismiss-count').get() == null ? 3 : 3 - staticStorage('swipe-instruction-dismiss-count').get() 
+export const swipeInstruction = () => `<div class="swipe z-3" style="background-color: black; opacity: 0.7">
+<p class="text-white text-center px-1 fs-3" style="position: fixed; top: 40vh">
+  Use a swipe gesture to cycle through players, or use the yellow buttons at the bottom to quickly cycle to another player!
+</p>
+<div class="arrow">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+<p class="text-white text-center fs-6 text-decoration-underline" style="position: fixed; bottom: 10vh; left: calc(50vw - 87.12px)">Click anywhere to close</p>
+<p class="text-white text-center fs-6" style="position: fixed; bottom: 20vh; left: calc(50vw - 187.12px)">This message will be dismissed in <span class='mx-1' style='color:yellow'> ${dismissIn} </span> more page loads.</p>
+<div class="path"></div>
+<div class="hand-icon"></div>
+</div>`

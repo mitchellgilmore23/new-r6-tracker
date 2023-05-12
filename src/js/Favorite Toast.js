@@ -1,5 +1,6 @@
 import * as Off_Canvas from './Off Canvas';
-import * as Local_Storage from './Local Storage';
+import { staticStorage } from './Local Storage';
+
 function templates(add,lookupName,lookupPlatform,randomNum) {
 	if (add){
 		return `
@@ -33,12 +34,12 @@ export function favoriteStarClick(lookupName,lookupColumn,lookupPlatform) {
   if(starIcon.attr('src').indexOf('Filled') !== -1){
     starIcon.attr('src','../media/Empty Star.svg');
     add = false;
-		Local_Storage.staticStorage().rm('favorites',lookupName);
+		staticStorage('favorites').rm(lookupName);
   }
   else { 
     starIcon.attr('src','../media/Filled Star.svg');
     add = true;
-		Local_Storage.staticStorage().set('favorites',lookupName,lookupPlatform)
+		staticStorage('favorites').set(lookupName,lookupPlatform)
   }
   let toastTemplate = templates(add,lookupName,lookupPlatform,randomNum);
   $('[attr=favorite-toast]').append(toastTemplate);
@@ -51,6 +52,6 @@ export function favoriteStarClick(lookupName,lookupColumn,lookupPlatform) {
 
 export function handleFavoriteStarOnLoad(currentPlayerCol,lookupName) {
 	let starIcon = $(`div[player=${currentPlayerCol}]`).find('img[width=24px]');
-	let playerisFav = Local_Storage.staticStorage().check('favorites',lookupName).status;
+	let playerisFav = staticStorage('favorites').check(lookupName).status;
 	playerisFav ? starIcon.attr('src','../media/Filled Star.svg') : starIcon.attr('src','../media/Empty Star.svg');
 }
