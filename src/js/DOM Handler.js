@@ -361,7 +361,7 @@ export const swipeInstruction = () => `<div class="swipe z-3" style="background-
 </div>
 
 <p class="text-white text-center fs-6 text-decoration-underline" style="position: fixed; bottom: 10vh; left: calc(50vw - 87.12px)">Click anywhere to close</p>
-<p class="text-white text-center fs-6" style="position: fixed; bottom: 20vh; left: calc(50vw - 187.12px)">This message will be dismissed in <span class='mx-1' style='color:yellow'> ${dismissIn} </span> more page loads.</p>
+<p class="text-white text-center fs-6" style="position: fixed; bottom: 20vh; left: calc(50vw - 187.12px)">This message will be dismissed in ${dismissIn} more page loads.</p>
 <div class="path"></div>
 <div class="hand-icon"></div>
 </div>`
